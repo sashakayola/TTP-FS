@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "babel": "^6.23.0",
+    "chai-http": "^4.3.0",
     "concurrently": "^4.1.0",
     "crypto": "^1.0.1",
     "express": "^4.16.4",
@@ -14,7 +15,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
-    "sequelize": "^5.8.11"
+    "sequelize": "^5.8.11",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.3",
