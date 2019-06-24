@@ -11,6 +11,7 @@ import backgroundImage from '../assets/backgroundImage.jpg'
 class Login extends Component {
   constructor(props) {
     super(props)
+
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -34,6 +35,7 @@ class Login extends Component {
 
   render() {
     const { classes } = this.props;
+    const { error } = this.props;
     return (
       <div
         className={classes.mainContent}
@@ -62,7 +64,7 @@ class Login extends Component {
               <Grid item>
               <Input name="password" type="password" placeholder="Password" className={classes.text}/>
               </Grid>
-
+              {error && error.response && <div> {error.response.data} </div>}
               <Grid item>
                   <Button variant='outlined' color="primary" size="large" type="submit">
                     Login
@@ -85,11 +87,12 @@ class Login extends Component {
   }
 }
 
-// const mapState = state => {
-//   return {
-//     error: state.user.user.error
-//   }
-// }
+const mapState = state => {
+  return {
+    error: state.user.error
+  }
+}
+
 const mapDispatch = dispatch => {
   return {
     loginUser: (email, password) =>
@@ -110,4 +113,4 @@ const styles = ({
   }
 });
 
-export default connect(null, mapDispatch)(withStyles(styles)(Login));
+export default connect(mapState, mapDispatch)(withStyles(styles)(Login));

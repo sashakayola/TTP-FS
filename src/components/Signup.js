@@ -36,7 +36,8 @@ class Signup extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, error } = this.props;
+
     return (
       <div
         className={classes.mainContent}
@@ -73,7 +74,7 @@ class Signup extends Component {
               <Grid item>
               <Input name="password" type="password" placeholder="Password" className={classes.text}/>
               </Grid>
-
+              { error && error.response && <div> {error.response.data} </div> }
               <Grid item>
                   <Button variant='outlined' color="primary" size="large" type="submit">
                     Sign Up
@@ -96,11 +97,11 @@ class Signup extends Component {
   }
 }
 
-// const mapState = state => {
-//   return {
-//     error: state.user.user.error
-//   }
-// }
+const mapState = state => {
+  return {
+    error: state.user.error
+  }
+}
 
 const mapDispatch = dispatch => {
   return {
@@ -122,4 +123,4 @@ const styles = ({
   }
 });
 
-export default connect(null, mapDispatch)(withStyles(styles)(Signup));
+export default connect(mapState, mapDispatch)(withStyles(styles)(Signup));

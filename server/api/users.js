@@ -17,7 +17,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
   try {
     const newUser = User.create({
       firstName: req.body.firstName,
@@ -28,7 +28,6 @@ router.post('/', async (req, res, next) => {
     res.status(201).json(newUser)
   } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
-        res.status(401).send("User already exists");
       } else if (error.name === "SequelizeValidationError") {
         res.status(401).send("Please Enter a Valid Email");
       } else {
