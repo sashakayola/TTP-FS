@@ -23,23 +23,18 @@ export const signupUser = (
   }
   try {
     dispatch(getUser(res.data))
-    alert('user added')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
   }
 }
 
 export const loginUser = (
-  firstName,
-  lastName,
   email,
   password
 ) => async dispatch => {
   let res
   try {
-    res = await axios.post('api/users/', {
-      firstName,
-      lastName,
+    res = await axios.post('api/users/login/', {
       email,
       password
     })
@@ -48,7 +43,6 @@ export const loginUser = (
   }
   try {
     dispatch(getUser(res.data))
-    alert('user added')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
   }

@@ -6,7 +6,7 @@ import {Grid, Input} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import image from "../backgroundImage.jpg"
+import backgroundImage from '../assets/backgroundImage.jpg'
 
 class Login extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Login extends Component {
       const email = event.target.email.value
       const password = event.target.password.value
       await this.props.loginUser(email, password)
-      this.props.history.push('/transactions');
+      // this.props.history.push('/transactions');
     } catch (error) {
       this.setState({
         error
@@ -38,7 +38,7 @@ class Login extends Component {
       <div
         className={classes.mainContent}
         style={{
-          backgroundImage: "url(" + image + ")",
+          backgroundImage: "url(" + backgroundImage + ")",
           backgroundSize: "cover",
           backgroundPosition: "top center"
         }}

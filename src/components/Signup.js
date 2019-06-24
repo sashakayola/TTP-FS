@@ -6,7 +6,7 @@ import {Grid, Input} from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
-import image from '../backgroundImage.jpg'
+import backgroundImage from '../assets/backgroundImage.jpg'
 
 
 class Signup extends Component {
@@ -41,7 +41,7 @@ class Signup extends Component {
       <div
         className={classes.mainContent}
         style={{
-          backgroundImage: "url(" + image + ")",
+          backgroundImage: "url(" + backgroundImage + ")",
           backgroundSize: "cover",
           backgroundPosition: "top center"
         }}
