@@ -3,14 +3,16 @@ import React, {Component} from 'react'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
-  Signup
+  Signup,
+  Transactions,
+  Login
 } from './components'
 // import {me} from './store'
 
 /**
  * COMPONENT
  */
-class Routes extends Component {
+export default class Routes extends Component {
   // componentDidMount() {
   //   this.props.loadInitialData()
   // }
@@ -20,7 +22,10 @@ class Routes extends Component {
 
     return (
       <Switch>
-        <Route path="/" component={Signup} />
+        <Route exact path="/transactions" component={Transactions} />
+        <Route exact path="/signup" component={Signup} />
+        <Route exact path="/login" component={Login} />
+
         {/* <Route exact path="/products/:id" component={SingleProduct} />
         <Route path="/payment" component={Checkout} />
         {isLoggedIn && (

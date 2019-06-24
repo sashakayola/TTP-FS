@@ -18,7 +18,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import FormGroup from "@material-ui/core/FormGroup";
 
 
-class Signup extends Component {
+class Login extends Component {
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -125,4 +125,4 @@ const styles = ({
   },
 });
 
-export default connect(null, mapDispatch)(withStyles(styles)(Signup));
+export default connect(null, mapDispatch)(withStyles(styles)(Login));

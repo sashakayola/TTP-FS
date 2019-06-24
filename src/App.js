@@ -1,12 +1,11 @@
 import React from 'react'
-
-import {Signup} from './components'
 import withStyles from "@material-ui/core/styles/withStyles";
+import Routes from './routes'
 
 const App = ({classes}) => {
   return (
     <div className={classes.app}>
-      <Signup/>
+      <Routes/>
     </div>
   )
 };
