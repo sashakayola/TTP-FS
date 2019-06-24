@@ -1,21 +1,12 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {loginUser} from '../store'
 import Button from "@material-ui/core/Button";
 import {Grid, Input} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea"
 import image from "../backgroundImage.jpg"
-import CardHeader from "@material-ui/core/CardHeader";
-import FormGroup from "@material-ui/core/FormGroup";
-
 
 class Login extends Component {
   constructor(props) {
@@ -26,7 +17,6 @@ class Login extends Component {
   async handleSubmit(event) {
     try {
       event.preventDefault()
-      // const formName = event.target.name
       const email = event.target.email.value
       const password = event.target.password.value
       await this.props.loginUser(email, password)
@@ -56,7 +46,7 @@ class Login extends Component {
 
       <Grid container className={classes.mainContent} justify="center" alignItems="center" direction="column">
         <Grid item>
-          <Card>
+          <Card className={classes.card}>
           <form name="signup" onSubmit={this.handleSubmit}>
             <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
               <Grid item>
@@ -65,22 +55,22 @@ class Login extends Component {
                   </Typography>
               </Grid>
 
-              <Grid item xs={10}>
-              <Input name="email" type="text" placeholder="Email" />
-              </Grid>
-
-              <Grid item xs={10}>
-              <Input name="password" type="password" placeholder="Password" />
+              <Grid item>
+              <Input name="email" type="text" placeholder="Email" className={classes.text}/>
               </Grid>
 
               <Grid item>
-                  <Button simple color="primary" size="large" type="submit">
+              <Input name="password" type="password" placeholder="Password" className={classes.text}/>
+              </Grid>
+
+              <Grid item>
+                  <Button variant='outlined' color="primary" size="large" type="submit">
                     Login
                   </Button>
               </Grid>
 
               <Grid item>
-                  <Button simple color="secondary" size="small" onClick={() => this.handleSignup()}>
+                  <Button color="secondary" size="small" onClick={() => this.handleSignup()}>
                     Not a client? Sign up
                   </Button>
               </Grid>
@@ -112,6 +102,12 @@ const styles = ({
     width: '100%',
     height: '100%',
   },
+  card: {
+    padding: '40px',
+  },
+  text: {
+    width: 250
+  }
 });
 
 export default connect(null, mapDispatch)(withStyles(styles)(Login));

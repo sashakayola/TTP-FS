@@ -1,21 +1,12 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import {Link} from 'react-router-dom'
-// import compose from 'recompose/compose';
 import {connect} from 'react-redux'
 import {signupUser} from '../store'
-import Button from "@material-ui/core/Button";
-import {Grid, Input} from "@material-ui/core";
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea"
-import image from "../backgroundImage.jpg"
-import CardHeader from "@material-ui/core/CardHeader";
-import FormGroup from "@material-ui/core/FormGroup";
+import Button from '@material-ui/core/Button'
+import {Grid, Input} from '@material-ui/core'
+import withStyles from '@material-ui/core/styles/withStyles'
+import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import image from '../backgroundImage.jpg'
 
 
 class Signup extends Component {
@@ -27,7 +18,6 @@ class Signup extends Component {
   async handleSubmit(event) {
     try {
       event.preventDefault()
-      // const formName = event.target.name
       const firstName = event.target.firstName.value
       const lastName = event.target.lastName.value
       const email = event.target.email.value
@@ -59,8 +49,8 @@ class Signup extends Component {
 
       <Grid container className={classes.mainContent} justify="center" alignItems="center" direction="column">
         <Grid item>
-          <Card>
-          <form name="signup" onSubmit={this.handleSubmit}>
+        <Card className={classes.card}>
+          <form onSubmit={this.handleSubmit}>
             <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
               <Grid item>
                   <Typography variant="h5">
@@ -68,30 +58,30 @@ class Signup extends Component {
                   </Typography>
               </Grid>
 
-              <Grid item xs={10}>
-                <Input name="firstName" type="text" placeholder="First Name" />
-              </Grid>
-
-              <Grid item xs={10}>
-              <Input name="lastName" type="text" placeholder="Last Name" />
-              </Grid>
-
-              <Grid item xs={10}>
-              <Input name="email" type="text" placeholder="Email" />
-              </Grid>
-
-              <Grid item xs={10}>
-              <Input name="password" type="password" placeholder="Password" />
+              <Grid item>
+                <Input name="firstName" type="text" placeholder="First Name" className={classes.text}/>
               </Grid>
 
               <Grid item>
-                  <Button simple color="primary" size="large" type="submit">
+              <Input name="lastName" type="text" placeholder="Last Name" className={classes.text}/>
+              </Grid>
+
+              <Grid item>
+              <Input name="email" type="text" placeholder="Email" className={classes.text}/>
+              </Grid>
+
+              <Grid item>
+              <Input name="password" type="password" placeholder="Password" className={classes.text}/>
+              </Grid>
+
+              <Grid item>
+                  <Button variant='outlined' color="primary" size="large" type="submit">
                     Sign Up
                   </Button>
               </Grid>
 
               <Grid item>
-                  <Button simple color="secondary" size="small" onClick={() => this.handleLogin()}>
+                  <Button color="secondary" size="small" onClick={() => this.handleLogin()}>
                     Already Registered?
                   </Button>
               </Grid>
@@ -111,6 +101,7 @@ class Signup extends Component {
 //     error: state.user.user.error
 //   }
 // }
+
 const mapDispatch = dispatch => {
   return {
     signupUser: (firstName, lastName, email, password) =>
@@ -123,6 +114,12 @@ const styles = ({
     width: '100%',
     height: '100%',
   },
+  card: {
+    padding: '40px',
+  },
+  text: {
+    width: 250
+  }
 });
 
 export default connect(null, mapDispatch)(withStyles(styles)(Signup));
