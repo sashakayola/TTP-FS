@@ -42,7 +42,7 @@ class Signup extends Component {
   }
 
   handleLogin() {
-    alert("hi")
+    this.props.history.push('/login')
   }
 
   render() {

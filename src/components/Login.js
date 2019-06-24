@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-// import compose from 'recompose/compose';
 import {connect} from 'react-redux'
-import {signupUser} from '../store'
+import {loginUser} from '../store'
 import Button from "@material-ui/core/Button";
 import {Grid, Input} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -28,11 +27,9 @@ class Login extends Component {
     try {
       event.preventDefault()
       // const formName = event.target.name
-      const firstName = event.target.firstName.value
-      const lastName = event.target.lastName.value
       const email = event.target.email.value
       const password = event.target.password.value
-      await this.props.signupUser(firstName, lastName, email, password)
+      await this.props.loginUser(email, password)
       this.props.history.push('/transactions');
     } catch (error) {
       this.setState({
@@ -41,8 +38,8 @@ class Login extends Component {
     }
   }
 
-  handleLogin() {
-    alert("hi")
+  handleSignup() {
+    this.props.history.push('/signup')
   }
 
   render() {
@@ -64,16 +61,8 @@ class Login extends Component {
             <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
               <Grid item>
                   <Typography variant="h5">
-                    Register
+                    Welcome back
                   </Typography>
-              </Grid>
-
-              <Grid item xs={10}>
-                <Input name="firstName" type="text" placeholder="First Name" />
-              </Grid>
-
-              <Grid item xs={10}>
-              <Input name="lastName" type="text" placeholder="Last Name" />
               </Grid>
 
               <Grid item xs={10}>
@@ -86,13 +75,13 @@ class Login extends Component {
 
               <Grid item>
                   <Button simple color="primary" size="large" type="submit">
-                    Sign Up
+                    Login
                   </Button>
               </Grid>
 
               <Grid item>
-                  <Button simple color="secondary" size="small" onClick={() => this.handleLogin()}>
-                    Already Registered?
+                  <Button simple color="secondary" size="small" onClick={() => this.handleSignup()}>
+                    Not a client? Sign up
                   </Button>
               </Grid>
 
@@ -113,8 +102,8 @@ class Login extends Component {
 // }
 const mapDispatch = dispatch => {
   return {
-    signupUser: (firstName, lastName, email, password) =>
-      dispatch(signupUser(firstName, lastName, email, password))
+    loginUser: (email, password) =>
+      dispatch(loginUser(email, password))
   }
 }
 

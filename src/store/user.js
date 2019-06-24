@@ -15,49 +15,32 @@ const getUser = user => ({type: GET_USER, user})
 //   }
 // }
 
-// export const signupUser = (
-//   firstName,
-//   lastName,
-//   email,
-//   password
-// ) => async dispatch => {
-//   let res
-//   console.log('in hereee')
-//   try {
-//     res = await axios.post('/api/users', {
-//       firstName,
-//       lastName,
-//       email,
-//       password
-//     })
-//   } catch (authError) {
-//     return dispatch(getUser({error: authError}))
-//   }
-//   try {
-//     dispatch(getUser(res.data))
-//     alert('user added')
-//     // history.push('/home')
-//   } catch (dispatchOrHistoryErr) {
-//     console.error(dispatchOrHistoryErr)
-//   }
-// }
-
-export const signupUser = (firstName, lastName, email, password) => async dispatch => {
+export const signupUser = (
+  firstName,
+  lastName,
+  email,
+  password
+) => async dispatch => {
+  let res
   try {
-    let res = await axios.post('api/users/', {
+    res = await axios.post('api/users/', {
       firstName,
       lastName,
       email,
       password
     })
+  } catch (authError) {
+    return dispatch(getUser({error: authError}))
+  }
+  try {
     dispatch(getUser(res.data))
-  } catch (error) {
-    console.error(error.message)
+    alert('user added')
+  } catch (dispatchOrHistoryErr) {
+    console.error(dispatchOrHistoryErr)
   }
 }
 
-
- const initialState = {}
+const initialState = {}
 
 export default function(state = initialState, action) {
   switch (action.type) {

@@ -4,7 +4,7 @@ export default class Transactions extends Component {
   render() {
     return (
       <div>
-        <h5>Hi</h5>
+        <h5>Placeholder</h5>
       </div>
     )
   }
