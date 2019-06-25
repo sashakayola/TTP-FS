@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { signupUser } from '../store';
 import Button from '@material-ui/core/Button';
 import { Grid, Input } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import backgroundImage from '../assets/backgroundImage.jpg';
+import axios from 'axios';
 
 class Signup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+    };
+  }
+
   handleSubmit = async event => {
     const getFormData = event => {
       return {
@@ -22,12 +28,18 @@ class Signup extends Component {
     try {
       event.preventDefault();
       const { firstName, lastName, email, password } = getFormData(event);
-      await this.props.signupUser(firstName, lastName, email, password);
-      // this.props.history.push('/transactions');
-    } catch (error) {
-      this.setState({
-        error,
+      await axios.post('api/users/', {
+        firstName,
+        lastName,
+        email,
+        password,
       });
+      this.props.history.push('/transactions');
+    } catch (authError) {
+      this.setState({
+        error: authError,
+      });
+      return;
     }
   };
 
@@ -92,8 +104,8 @@ class Signup extends Component {
                       className={classes.text}
                     />{' '}
                   </Grid>{' '}
-                  {error && error.response && (
-                    <div> {error.response.data} </div>
+                  {this.state.error && (
+                    <div> {this.state.error.response.data} </div>
                   )}{' '}
                   <Grid item>
                     <Button
@@ -124,19 +136,6 @@ class Signup extends Component {
   }
 }
 
-const mapState = state => {
-  return {
-    error: state.user.error,
-  };
-};
-
-const mapDispatch = dispatch => {
-  return {
-    signupUser: (firstName, lastName, email, password) =>
-      dispatch(signupUser(firstName, lastName, email, password)),
-  };
-};
-
 const styles = {
   mainContent: {
     width: '100%',
@@ -153,7 +152,4 @@ const styles = {
   },
 };
 
-export default connect(
-  mapState,
-  mapDispatch
-)(withStyles(styles)(Signup));
+export default withStyles(styles)(Signup);

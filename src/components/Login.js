@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { loginUser } from '../store';
 import Button from '@material-ui/core/Button';
 import { Grid, Input } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import backgroundImage from '../assets/backgroundImage.jpg';
+import axios from 'axios';
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+    };
+  }
+
   handleSubmit = async event => {
     const getFormData = event => {
       return {
@@ -20,12 +26,16 @@ class Login extends Component {
     try {
       event.preventDefault();
       const { email, password } = getFormData(event);
-      await this.props.loginUser(email, password);
-      // this.props.history.push('/transactions');
-    } catch (error) {
-      this.setState({
-        error,
+      await axios.post('api/users/login/', {
+        email,
+        password,
       });
+      this.props.history.push('/transactions');
+    } catch (authError) {
+      this.setState({
+        error: authError,
+      });
+      return;
     }
   };
 
@@ -34,7 +44,7 @@ class Login extends Component {
   };
 
   render() {
-    const { classes, error } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.mainContent}>
         <Grid
@@ -55,9 +65,8 @@ class Login extends Component {
                   spacing={4}
                 >
                   <Grid item>
-                    <Typography variant='h5'>Welcome back </Typography>{' '}
-                  </Grid>
-
+                    <Typography variant='h5'> Welcome back </Typography>{' '}
+                  </Grid>{' '}
                   <Grid item>
                     <Input
                       name='email'
@@ -65,8 +74,7 @@ class Login extends Component {
                       placeholder='Email'
                       className={classes.text}
                     />{' '}
-                  </Grid>
-
+                  </Grid>{' '}
                   <Grid item>
                     <Input
                       name='password'
@@ -74,12 +82,10 @@ class Login extends Component {
                       placeholder='Password'
                       className={classes.text}
                     />{' '}
-                  </Grid>
-
-                  {error && error.response && (
-                    <div> {error.response.data} </div>
-                  )}
-
+                  </Grid>{' '}
+                  {this.state.error && (
+                    <div> {this.state.error.response.data} </div>
+                  )}{' '}
                   <Grid item>
                     <Button
                       variant='outlined'
@@ -89,8 +95,7 @@ class Login extends Component {
                     >
                       Login{' '}
                     </Button>{' '}
-                  </Grid>
-
+                  </Grid>{' '}
                   <Grid item>
                     <Button
                       color='secondary'
@@ -99,7 +104,7 @@ class Login extends Component {
                     >
                       Not a client ? Sign up{' '}
                     </Button>{' '}
-                  </Grid>
+                  </Grid>{' '}
                 </Grid>{' '}
               </form>{' '}
             </Card>{' '}
@@ -109,18 +114,6 @@ class Login extends Component {
     );
   }
 }
-
-const mapState = state => {
-  return {
-    error: state.user.error,
-  };
-};
-
-const mapDispatch = dispatch => {
-  return {
-    loginUser: (email, password) => dispatch(loginUser(email, password)),
-  };
-};
 
 const styles = {
   mainContent: {
@@ -138,7 +131,4 @@ const styles = {
   },
 };
 
-export default connect(
-  mapState,
-  mapDispatch
-)(withStyles(styles)(Login));
+export default withStyles(styles)(Login);

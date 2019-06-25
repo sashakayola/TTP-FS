@@ -1,20 +1,23 @@
-import React from 'react'
-import withStyles from "@material-ui/core/styles/withStyles";
-import Routes from './routes'
+import React from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Routes from './routes';
+import { BrowserRouter } from 'react-router-dom';
 
-const App = ({classes}) => {
+const App = ({ classes }) => {
   return (
     <div className={classes.app}>
-      <Routes/>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>{' '}
     </div>
-  )
+  );
 };
 
-const styles = ({
+const styles = {
   app: {
     width: '100vw',
     height: '100vh',
-  }
-});
+  },
+};
 
 export default withStyles(styles)(App);
