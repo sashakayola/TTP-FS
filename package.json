@@ -10,10 +10,13 @@
     "babel": "^6.23.0",
     "chai-http": "^4.3.0",
     "concurrently": "^4.1.0",
+    "connect-session-sequelize": "^6.0.0",
     "crypto": "^1.0.1",
     "express": "^4.16.4",
+    "express-session": "^1.16.2",
     "morgan": "^1.9.1",
     "onchange": "^6.0.0",
+    "passport": "^0.4.0",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
     "prettier": "^1.18.2",
@@ -47,7 +50,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
       ">0.2%",

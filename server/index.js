@@ -1,31 +1,90 @@
-const path = require('path')
-const express = require('express')
-const morgan = require('morgan') // logging middleware
-const db = require('./db')
-const PORT = process.env.PORT || 8080
-const app = express()
+const path = require('path');
+const express = require('express');
+const morgan = require('morgan');
+const session = require('express-session');
+const passport = require('passport');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const db = require('./db');
+const sessionStore = new SequelizeStore({
+  db,
+});
+const PORT = process.env.PORT || 3001;
+const app = express();
+const User = require('./db/models/user');
+module.exports = app;
 
-app.use(morgan('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+passport.serializeUser((user, done) => done(null, user.id));
 
-app.use('/api', require('./api'))
-app.use(express.static(path.join(__dirname, '../public')))
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findByPk(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
+const createApp = () => {
+  app.use(morgan('dev'));
+  app.use(express.json());
+  app.use(
+    express.urlencoded({
+      extended: true,
+    })
+  );
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'))
-})
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'very secret password',
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
 
-app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(err.status || 500).send(err.message || 'server error')
-})
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-module.exports = app
+  app.use('/api', require('./api'));
 
-db.sync()
-  .then(() => {
-    console.log('db is synced')
-    app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
-})
+  app.use(express.static(path.join(__dirname, '..', 'public')));
+
+  app.use((req, res, next) => {
+    if (path.extname(req.path).length) {
+      const err = new Error('Not found');
+      err.status = 404;
+      next(err);
+    } else {
+      next();
+    }
+  });
+
+  app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+  });
+
+  app.use((err, req, res, next) => {
+    console.error(err);
+    console.error(err.stack);
+    res.status(err.status || 500).send(err.message || 'Internal server error.');
+  });
+};
+
+const startListening = () => {
+  app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+};
+
+const syncDb = () => db.sync();
+
+async function startApp() {
+  await sessionStore.sync();
+  await syncDb();
+  await createApp();
+  await startListening();
+}
+
+if (require.main === module) {
+  startApp();
+} else {
+  createApp();
+}
