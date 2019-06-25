@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Routes from './routes';
+import { BrowserRouter } from 'react-router-dom';
 
-function App() {
+const App = ({ classes }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.app}>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>{' '}
     </div>
   );
-}
+};
 
-export default App;
+const styles = {
+  app: {
+    width: '100vw',
+    height: '100vh',
+  },
+};
+
+export default withStyles(styles)(App);
