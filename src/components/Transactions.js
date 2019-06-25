@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class Transactions extends Component {
   render() {
@@ -6,6 +6,6 @@ export default class Transactions extends Component {
       <div>
         <h5>Placeholder</h5>
       </div>
-    )
+    );
   }
 }
