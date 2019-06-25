@@ -2,7 +2,10 @@ import axios from 'axios'
 
 const GET_USER = 'GET_USER'
 
-const getUser = user => ({type: GET_USER, user})
+const getUser = user => ({
+  type: GET_USER,
+  user
+})
 
 export const signupUser = (
   firstName,
@@ -12,14 +15,16 @@ export const signupUser = (
 ) => async dispatch => {
   let res
   try {
-    res = await axios.post('api/users/signup', {
+    res = await axios.post('api/users/', {
       firstName,
       lastName,
       email,
       password
     })
   } catch (authError) {
-    return dispatch(getUser({error: authError}))
+    return dispatch(getUser({
+      error: authError
+    }))
   }
   try {
     dispatch(getUser(res.data))
@@ -39,7 +44,9 @@ export const loginUser = (
       password
     })
   } catch (authError) {
-    return dispatch(getUser({error: authError}))
+    return dispatch(getUser({
+      error: authError
+    }))
   }
   try {
     dispatch(getUser(res.data))
@@ -50,7 +57,7 @@ export const loginUser = (
 
 const initialState = {}
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_USER:
       return action.user
@@ -58,4 +65,3 @@ export default function(state = initialState, action) {
       return state
   }
 }
-

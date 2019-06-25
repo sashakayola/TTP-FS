@@ -1,15 +1,13 @@
-// functions to create user and get user information based on user id
-// getting the user info will call the transactions and portfolio functions
+const {
+  User
+} = require('../db/models');
 
-const { User } = require('../db/models');
-
-// function to create a new user
 const createUser = async (
   firstName,
   lastName,
   email,
   password,
-  balance = 5000
+  balance = 5000 // set initial balance to $5000
 ) => {
   let user = await User.create({
     firstName,
@@ -18,8 +16,23 @@ const createUser = async (
     password,
     balance,
   });
-  console.log(user);
+  return user;
+};
+
+const findByEmail = async email => {
+  let user = await User.findOne({
+    where: {
+      email,
+    },
+  });
+  return user;
+};
+
+const findById = async id => {
+  let user = await User.findByPk(id);
   return user;
 };
 
 module.exports.createUser = createUser;
+module.exports.findByEmail = findByEmail;
+module.exports.findById = findById;

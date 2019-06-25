@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const morgan = require('morgan');
+const morgan = require('morgan'); // logging middleware
 const session = require('express-session');
 const passport = require('passport');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -10,21 +10,21 @@ const sessionStore = new SequelizeStore({
 });
 const PORT = process.env.PORT || 3001;
 const app = express();
-const User = require('./db/models/user');
+const { findById } = require('./domain/user');
 module.exports = app;
 
-passport.serializeUser((user, done) => done(null, user.id));
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findByPk(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
 const createApp = () => {
+  passport.serializeUser((user, done) => done(null, String(user.id)));
+
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await findById(id);
+      done(null, user);
+    } catch (err) {
+      done(err);
+    }
+  });
+
   app.use(morgan('dev'));
   app.use(express.json());
   app.use(
