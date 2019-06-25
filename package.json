@@ -13,6 +13,7 @@
     "crypto": "^1.0.1",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
+    "onchange": "^6.0.0",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
     "prettier": "^1.18.2",
@@ -35,17 +36,18 @@
     "mocha": "^6.1.4"
   },
   "scripts": {
-    "dev": "export NODE_ENV=development && concurrently \"npm run start-client\" \"nodemon --watch server server\"",
+    "dev": "export NODE_ENV=development && concurrently \"nodemon --watch server server\" \"npm run start-client\"",
     "start-client": "react-scripts start",
     "start": "export NODE_ENV=production && node server",
     "build": "react-scripts build",
     "test": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register",
+    "pretty": "onchange '**/*.js' -- prettier --write {{changed}}",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://127.0.0.1:8080",
+  "proxy": "http://localhost:8080",
   "browserslist": {
     "production": [
       ">0.2%",
