@@ -5,6 +5,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import backgroundImage from '../assets/backgroundImage.jpg';
+import TradingForm from './TradingForm';
+import CurrentHoldings from './CurrentHoldings';
 
 class Portfolio extends Component {
   render() {
@@ -19,75 +21,8 @@ class Portfolio extends Component {
           direction='row'
           spacing={5}
         >
-          <Card className={classes.card}>
-            <Grid
-              container
-              justify='center'
-              alignItems='left'
-              direction='column'
-              spacing={4}
-            >
-              <Grid item>
-                <Typography variant='h5'> Current Portfolio </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 1 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 2 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 3 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 4 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 5 </Typography>{' '}
-              </Grid>{' '}
-            </Grid>{' '}
-          </Card>{' '}
-          <Card className={classes.card}>
-            <Grid
-              container
-              justify='center'
-              alignItems='center'
-              direction='column'
-              spacing={2}
-            >
-              <Grid item>
-                <Typography variant='h5'> Cash: $4000 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <TextField
-                  id='tickerSymbol'
-                  label='Ticker symbol'
-                  type='tickerSymbol'
-                  margin='normal'
-                  variant='outlined'
-                />
-              </Grid>{' '}
-              <Grid item>
-                <TextField
-                  id='quantity'
-                  label='Number of shares'
-                  type='quantity'
-                  margin='normal'
-                  variant='outlined'
-                />
-              </Grid>{' '}
-              <Grid item>
-                <Button
-                  variant='outlined'
-                  color='primary'
-                  size='large'
-                  type='submit'
-                >
-                  Buy{' '}
-                </Button>{' '}
-              </Grid>{' '}
-            </Grid>{' '}
-          </Card>{' '}
+          <CurrentHoldings />
+          <TradingForm />{' '}
         </Grid>{' '}
       </div>
     );
