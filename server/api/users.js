@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createUser, findByEmail, findById } = require('../domain/user');
+const { createUser, findByEmail, findById } = require('../domain/users');
 
 router.get('/:userId', async (req, res, next) => {
   try {

@@ -1,12 +1,13 @@
 const router = require('express').Router();
-const axios = require('axios');
+const {
+  getStockInfo
+} = require('../domain/stocks')
+
 
 router.get('/:ticker', async (req, res, next) => {
   try {
     const ticker = req.params.ticker;
-    const response = await axios.get(
-      `https://api.iextrading.com/1.0/stock/${ticker}/book`
-    );
+    const response = await getStockInfo(ticker);
     res.status(200).json({
       open: response.data.quote.open,
       latestPrice: response.data.quote.latestPrice,

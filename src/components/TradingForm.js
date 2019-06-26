@@ -10,7 +10,8 @@ class TradingForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
+      authError: null,
+      quantityError: null,
     };
   }
   handleSubmit = async event => {
@@ -24,16 +25,23 @@ class TradingForm extends Component {
     try {
       event.preventDefault();
       const { ticker, quantity } = getFormData(event);
-      let data = await axios.get(`api/stocks/${ticker}`);
-      console.log(data.data.latestPrice);
-      console.log(data.data.open);
-      this.setState({
-        error: null,
-      });
-      this.resetForm();
+      if (quantity < 1) {
+        this.setState({
+          quantityError: 'Negative or zero shares not allowed',
+        });
+      } else {
+        let data = await axios.get(`api/stocks/${ticker}`);
+        console.log(data.data.latestPrice);
+        console.log(data.data.open);
+        this.setState({
+          authError: null,
+          quantityError: null,
+        });
+        this.resetForm();
+      }
     } catch (authError) {
       this.setState({
-        error: authError,
+        authError,
       });
       return;
     }
@@ -63,8 +71,9 @@ class TradingForm extends Component {
               <Grid item>
                 <TextField
                   id='ticker'
+                  required
                   label='Ticker symbol'
-                  type='ticker'
+                  type='string'
                   margin='normal'
                   variant='outlined'
                 />
@@ -72,8 +81,9 @@ class TradingForm extends Component {
               <Grid item>
                 <TextField
                   id='quantity'
+                  required
                   label='Number of shares'
-                  type='quantity'
+                  type='number'
                   margin='normal'
                   variant='outlined'
                 />
@@ -82,6 +92,12 @@ class TradingForm extends Component {
                 {' '}
                 {this.state.error && (
                   <div> {this.state.error.response.data} </div>
+                )}{' '}
+              </Grid>{' '}
+              <Grid item>
+                {' '}
+                {this.state.quantityError && (
+                  <div> {this.state.quantityError} </div>
                 )}{' '}
               </Grid>{' '}
               <Grid item>

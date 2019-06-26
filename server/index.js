@@ -10,7 +10,9 @@ const sessionStore = new SequelizeStore({
 });
 const PORT = process.env.PORT || 3001;
 const app = express();
-const { findById } = require('./domain/user');
+const {
+  findById
+} = require('./domain/users');
 module.exports = app;
 
 const createApp = () => {
