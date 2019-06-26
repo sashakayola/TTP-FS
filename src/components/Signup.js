@@ -4,7 +4,6 @@ import { Grid, Input } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
-import backgroundImage from '../assets/backgroundImage.jpg';
 import axios from 'axios';
 
 class Signup extends Component {
@@ -48,10 +47,11 @@ class Signup extends Component {
   };
 
   render() {
-    const { classes, error } = this.props;
+    const { classes } = this.props;
 
     return (
       <div className={classes.mainContent}>
+        {' '}
         <Grid
           container
           className={classes.mainContent}
@@ -140,9 +140,6 @@ const styles = {
   mainContent: {
     width: '100%',
     height: '100%',
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'top center',
   },
   card: {
     padding: '40px',

@@ -10,15 +10,6 @@ class TradingForm extends Component {
     const { classes } = this.props;
     return (
       <div>
-        {' '}
-        {/* <Grid
-                  container
-                  className={classes.mainContent}
-                  justify='center'
-                  alignItems='center'
-                  direction='row'
-                  spacing={5}
-                > */}{' '}
         <Card className={classes.card}>
           <Grid
             container
@@ -51,7 +42,7 @@ class TradingForm extends Component {
             <Grid item>
               <Button
                 variant='outlined'
-                color='primary'
+                color='secondary'
                 size='large'
                 type='submit'
               >
@@ -60,7 +51,6 @@ class TradingForm extends Component {
             </Grid>{' '}
           </Grid>{' '}
         </Card>{' '}
-        {/* </Grid>{' '} */}{' '}
       </div>
     );
   }
