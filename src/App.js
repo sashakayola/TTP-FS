@@ -4,15 +4,19 @@ import Routes from './routes';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import backgroundImage from './assets/backgroundImage.jpg';
+import { AuthProvider } from './AuthContext';
 
 const App = ({ classes }) => {
   return (
     <div className={classes.mainContent}>
       <div className={classes.app}>
-        {' '}
+
+<AuthProvider>
         <BrowserRouter>
           <Navbar /> <Routes />
         </BrowserRouter>{' '}
+
+</AuthProvider>
       </div>{' '}
     </div>
   );

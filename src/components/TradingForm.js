@@ -57,35 +57,35 @@ class TradingForm extends Component {
     return (
       <div>
         <Card className={classes.card}>
-          <form onSubmit={this.handleSubmit} id='tradingForm'>
+          <form onSubmit={this.handleSubmit} id="tradingForm">
             <Grid
               container
-              justify='center'
-              alignItems='center'
-              direction='column'
+              justify="center"
+              alignItems="center"
+              direction="column"
               spacing={2}
             >
               <Grid item>
-                <Typography variant='h5'> Cash: $4000 </Typography>{' '}
+                <Typography variant="h5"> Cash: $4000 </Typography>{' '}
               </Grid>{' '}
               <Grid item>
                 <TextField
-                  id='ticker'
+                  id="ticker"
                   required
-                  label='Ticker symbol'
-                  type='string'
-                  margin='normal'
-                  variant='outlined'
+                  label="Ticker symbol"
+                  type="string"
+                  margin="normal"
+                  variant="outlined"
                 />
               </Grid>{' '}
               <Grid item>
                 <TextField
-                  id='quantity'
+                  id="quantity"
                   required
-                  label='Number of shares'
-                  type='number'
-                  margin='normal'
-                  variant='outlined'
+                  label="Number of shares"
+                  type="number"
+                  margin="normal"
+                  variant="outlined"
                 />
               </Grid>{' '}
               <Grid item>
@@ -102,10 +102,10 @@ class TradingForm extends Component {
               </Grid>{' '}
               <Grid item>
                 <Button
-                  variant='outlined'
-                  color='secondary'
-                  size='large'
-                  type='submit'
+                  variant="outlined"
+                  color="secondary"
+                  size="large"
+                  type="submit"
                 >
                   Buy{' '}
                 </Button>{' '}
