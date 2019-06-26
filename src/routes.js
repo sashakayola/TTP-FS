@@ -6,9 +6,6 @@ import AuthContext from './AuthContext';
 
 export default class Routes extends Component {
   static contextType = AuthContext;
-  // componentDidMount() {
-  //   this.props.loadInitialData()
-  // }
 
   render() {
     const { isAuth } = this.context;

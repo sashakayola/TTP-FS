@@ -10,6 +10,7 @@ router.get('/:userId', async (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      balance: user.balance
     });
   } catch (error) {
     next(error);
