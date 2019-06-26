@@ -1,11 +1,9 @@
 const router = require('express').Router();
 const axios = require('axios');
 
-module.exports = router;
-
-router.get('/', async (req, res, next) => {
+router.get('/:ticker', async (req, res, next) => {
   try {
-    const ticker = 'AAPL';
+    const ticker = req.params.ticker;
     const response = await axios.get(
       `https://api.iextrading.com/1.0/stock/${ticker}/book`
     );
@@ -18,3 +16,5 @@ router.get('/', async (req, res, next) => {
     res.status(400).send('Invalid ticker');
   }
 });
+
+module.exports = router;

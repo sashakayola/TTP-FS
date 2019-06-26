@@ -18,23 +18,38 @@ class CurrentHoldings extends Component {
             direction='column'
             spacing={4}
           >
-            <Grid item>
-              <Typography variant='h5'> Current Portfolio </Typography>{' '}
+            <Grid item align='center'>
+              <Typography variant='h5'> Portfolio: $3453 </Typography>{' '}
             </Grid>{' '}
             <Grid item>
-              <Typography variant='h7'> stock 1 </Typography>{' '}
+              <Typography variant='h7'>
+                {' '}
+                stock 1 - Current Price - Opening Price{' '}
+              </Typography>{' '}
             </Grid>{' '}
             <Grid item>
-              <Typography variant='h7'> stock 2 </Typography>{' '}
+              <Typography variant='h7'>
+                {' '}
+                stock 2 - Current Price - Opening Price{' '}
+              </Typography>{' '}
             </Grid>{' '}
             <Grid item>
-              <Typography variant='h7'> stock 3 </Typography>{' '}
+              <Typography variant='h7'>
+                {' '}
+                stock 3 - Current Price - Opening Price{' '}
+              </Typography>{' '}
             </Grid>{' '}
             <Grid item>
-              <Typography variant='h7'> stock 4 </Typography>{' '}
+              <Typography variant='h7'>
+                {' '}
+                stock 4 - Current Price - Opening Price{' '}
+              </Typography>{' '}
             </Grid>{' '}
             <Grid item>
-              <Typography variant='h7'> stock 5 </Typography>{' '}
+              <Typography variant='h7'>
+                {' '}
+                stock 5 - Current Price - Opening Price{' '}
+              </Typography>{' '}
             </Grid>{' '}
           </Grid>{' '}
         </Card>{' '}
@@ -45,8 +60,8 @@ class CurrentHoldings extends Component {
 
 const styles = {
   card: {
-    padding: '30px',
-    margin: '80px',
+    padding: '40px',
+    margin: '90px',
   },
   text: {
     width: 250,

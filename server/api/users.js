@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const { createUser, findByEmail, findById } = require('../domain/user');
 
-module.exports = router;
-
 router.get('/:userId', async (req, res, next) => {
   try {
     const userId = req.params.userId;
@@ -56,3 +54,5 @@ router.post('/login', async (req, res, next) => {
     next(error);
   }
 });
+
+module.exports = router;

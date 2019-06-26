@@ -16,7 +16,7 @@ class Portfolio extends Component {
           container
           className={classes.mainContent}
           justify='center'
-          alignItems='center'
+          // alignItems='center'
           direction='row'
           spacing={5}
         >
