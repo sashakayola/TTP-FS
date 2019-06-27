@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getStockInfo } = require('../domain/stocks');
+const { getStockInfo } = require('../domain/iex');
 const { createTransaction } = require('../domain/transactions');
 const { verifyBuy } = require('../domain/transactions');
 const { updateUserCash } = require('../domain/users');
@@ -36,7 +36,7 @@ router.post('/buy', async (req, res, next) => {
       quantity,
       latestPrice,
     ); // update user's cash balance
-    res.status(200).json({
+    res.status(201).json({
       open: stockInfo.data.quote.open,
       latestPrice: stockInfo.data.quote.latestPrice,
       updatedUserBalance,

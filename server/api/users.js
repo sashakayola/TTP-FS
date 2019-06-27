@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { createUser, findByEmail, findById } = require('../domain/users');
+const { getHoldings } = require('../domain/holdings');
 
 router.get('/:userId', async (req, res, next) => {
   try {
@@ -12,6 +13,16 @@ router.get('/:userId', async (req, res, next) => {
       email: user.email,
       balance: user.balance
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:userId/holdings', async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const holdings = await getHoldings(userId);
+    res.status(200).send(holdings);
   } catch (error) {
     next(error);
   }

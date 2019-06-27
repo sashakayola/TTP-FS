@@ -1,5 +1,14 @@
 const Holdings = require('../db/models/holdings');
 
+const getHoldings = async (userId) => {
+  try {
+    const currentHoldings = await Holdings.findAll({ where: { userId}});
+    return currentHoldings;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // add stock to portfolio
 const addToHoldings = async (ticker, quantity, userId) => {
   try {
@@ -20,3 +29,4 @@ const addToHoldings = async (ticker, quantity, userId) => {
 };
 
 module.exports.addToHoldings = addToHoldings;
+module.exports.getHoldings = getHoldings;
