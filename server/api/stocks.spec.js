@@ -32,3 +32,19 @@ xdescribe('Routes for user transactions', () => {
     });
   });
 });
+
+describe('Routes to get stock info', () => {
+  beforeEach(() => {
+    return db.sync({ force: true });
+  });
+
+  describe('GET /api/stock/', () => {
+    it('should return stock info based on ticker', async () => {
+      let ticker = 'AAPL'
+      const res = await request(app)
+        .get(`api/stock/${ticker}`)
+        .expect(200);
+      expect(res.body).to.be.an('object');
+    });
+  });
+});

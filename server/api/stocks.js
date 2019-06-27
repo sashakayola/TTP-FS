@@ -5,6 +5,18 @@ const { verifyBuy } = require('../domain/transactions');
 const { updateUserCash } = require('../domain/users');
 const { addToHoldings } = require('../domain/holdings');
 
+
+router.get('/:ticker', async (req, res, next) => {
+  const ticker = req.params.ticker;
+  let stockInfo = await getStockInfo(ticker);
+  let latestPrice = stockInfo.data.quote.latestPrice;
+  let open = stockInfo.data.quote.open;
+  res.status(200).json({
+    open,
+    latestPrice
+  });
+})
+
 // buy transaction
 router.post('/buy', async (req, res, next) => {
   const ticker = req.body.ticker;
@@ -20,6 +32,7 @@ router.post('/buy', async (req, res, next) => {
 
   let latestPrice = stockInfo.data.quote.latestPrice;
   let canBuy = await verifyBuy(userId, quantity, latestPrice);
+
   if (canBuy) {
     let transactionType = 'buy';
     await createTransaction(
@@ -37,8 +50,6 @@ router.post('/buy', async (req, res, next) => {
       latestPrice,
     ); // update user's cash balance
     res.status(201).json({
-      open: stockInfo.data.quote.open,
-      latestPrice: stockInfo.data.quote.latestPrice,
       updatedUserBalance,
     });
   } else {
