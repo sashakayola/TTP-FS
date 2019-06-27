@@ -7,8 +7,43 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import axios from 'axios'
 
 class CurrentHoldings extends Component {
+  constructor(props) {
+    super(props)
+    this.state = ({
+      userHoldings: null
+    })
+  }
+
+  getStockInfo = async (ticker) => {
+    let response = await axios.get(`api/stock/${ticker}`)
+    console.log(response.data.open)
+    console.log(response.data.latestPrice)
+    return response;
+  }
+
+  componentDidMount = async () => {
+    let tempState = []
+    this.props.userHoldings &&
+
+    (this.props.userHoldings.forEach((eachHolding) => {
+      console.log(eachHolding.ticker)
+      let stockInfo = this.getStockInfo(eachHolding.ticker)
+      let currentValue = stockInfo.data.latestPrice * eachHolding.quantity
+      tempState.push(
+        {ticker: eachHolding.ticker,
+        quantity: eachHolding.quantity,
+        currentValue
+       }
+      )
+    }))
+    this.setState({
+      userHoldings: tempState
+    })
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -31,13 +66,14 @@ class CurrentHoldings extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.userHoldings &&
-              this.props.userHoldings.sort().map(eachHolding => {
+            {this.state.userHoldings &&
+              this.state.userHoldings.sort().map(eachHolding => {
+                {/* const currentPrice = this.getStockInfo(eachHolding.ticker) */}
                 return (
                   <TableRow key={eachHolding.ticker}>
                     <TableCell>{eachHolding.ticker}</TableCell>
                     <TableCell align="center">{eachHolding.quantity}</TableCell>
-                    <TableCell align="center">currentValue</TableCell>
+                    <TableCell align="center">{this.getStockInfo(eachHolding.currentValue)}</TableCell>
                   </TableRow>
                 );
               })}

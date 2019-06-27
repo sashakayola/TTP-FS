@@ -5,7 +5,6 @@ const { verifyBuy } = require('../domain/transactions');
 const { updateUserCash } = require('../domain/users');
 const { addToHoldings } = require('../domain/holdings');
 
-
 router.get('/:ticker', async (req, res, next) => {
   const ticker = req.params.ticker;
   let stockInfo = await getStockInfo(ticker);
