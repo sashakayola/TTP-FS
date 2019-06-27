@@ -15,12 +15,12 @@ class TradingForm extends Component {
     this.state = {
       authError: null,
       quantityError: null,
+      userCashBalance: 5000,
     };
   }
 
   componentDidMount = async () => {
     let user = await axios.get(`/api/users/${this.context.userId}`);
-    // console.log(user);
     this.setState({
       userCashBalance: user.data.balance,
     });
@@ -44,7 +44,6 @@ class TradingForm extends Component {
     this.setState({
       authError: null,
       quantityError: null,
-      userBalanceError: null,
     });
 
     if (quantity < 1) {
@@ -58,8 +57,9 @@ class TradingForm extends Component {
           quantity,
           userId,
         });
-        // console.log(data.data.latestPrice);
-        // console.log(data.data.open);
+        this.setState({
+          userCashBalance: data.updatedUserBalance,
+        });
       } catch (error) {
         this.setState({
           authError: error,

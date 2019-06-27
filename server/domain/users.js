@@ -1,13 +1,11 @@
-const
-  User
- = require('../db/models/user');
+const User = require('../db/models/user');
 
 const createUser = async (
   firstName,
   lastName,
   email,
   password,
-  balance = 5000 // set initial balance to $5000
+  balance = 5000, // set initial balance to $5000
 ) => {
   let user = await User.create({
     firstName,
@@ -35,15 +33,18 @@ const findById = async id => {
 
 const updateUserCash = async (id, transactionType, quantity, price) => {
   let user = await User.findByPk(id);
-  let balance = user.dataValues.balance
+  let balance = user.dataValues.balance;
   let totalAmount = quantity * price;
 
   if (transactionType === 'buy') {
     let newBalance = balance - totalAmount;
-    User.update({ balance: newBalance}, {where: {id}})
-  } else { // else transaction is a sell
+    User.update({ balance: newBalance }, { where: { id } });
+    return newBalance;
+  } else {
+    // else transaction is a sell
     let newBalance = balance + totalAmount;
-    User.update({ balance: newBalance}, {where: {id}})
+    User.update({ balance: newBalance }, { where: { id } });
+    return newBalance;
   }
 };
 
