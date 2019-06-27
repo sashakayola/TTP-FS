@@ -20,7 +20,7 @@ class TradingForm extends Component {
 
   componentDidMount = async () => {
     let user = await axios.get(`/api/users/${this.context.userId}`);
-    console.log(user);
+    // console.log(user);
     this.setState({
       userCashBalance: user.data.balance,
     });
@@ -53,7 +53,7 @@ class TradingForm extends Component {
       });
     } else {
       try {
-        const { data } = await axios.post('api/stock/', {
+        const { data } = await axios.post('api/stock/buy', {
           ticker,
           quantity,
           userId,

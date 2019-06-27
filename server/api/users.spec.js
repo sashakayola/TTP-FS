@@ -36,7 +36,7 @@ describe('User routes', () => {
 
     it('should post a single user', async () => {
       const res = await request(app)
-        .post(`/api/users`)
+        .post('/api/users')
         .send(user)
         .expect(201);
       expect(res.body).to.be.an('object');
