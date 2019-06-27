@@ -1,59 +1,49 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import { Grid, Input, TextField } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 class CurrentHoldings extends Component {
   render() {
     const { classes } = this.props;
+
     return (
-      <div>
-        <Card className={classes.card}>
-          <Grid
-            container
-            justify='center'
-            alignItems='left'
-            direction='column'
-            spacing={4}
-          >
-            <Grid item align='center'>
-              <Typography variant='h5'> Portfolio: $3453 </Typography>{' '}
-            </Grid>{' '}
-            <Grid item>
-              <Typography variant='h7'>
-                {' '}
-                stock 1 - Current Price - Opening Price{' '}
-              </Typography>{' '}
-            </Grid>{' '}
-            <Grid item>
-              <Typography variant='h7'>
-                {' '}
-                stock 2 - Current Price - Opening Price{' '}
-              </Typography>{' '}
-            </Grid>{' '}
-            <Grid item>
-              <Typography variant='h7'>
-                {' '}
-                stock 3 - Current Price - Opening Price{' '}
-              </Typography>{' '}
-            </Grid>{' '}
-            <Grid item>
-              <Typography variant='h7'>
-                {' '}
-                stock 4 - Current Price - Opening Price{' '}
-              </Typography>{' '}
-            </Grid>{' '}
-            <Grid item>
-              <Typography variant='h7'>
-                {' '}
-                stock 5 - Current Price - Opening Price{' '}
-              </Typography>{' '}
-            </Grid>{' '}
-          </Grid>{' '}
-        </Card>{' '}
-      </div>
+      <Card className={classes.card}>
+        <Typography variant="h5" align="center">
+          {' '}
+          Portfolio: $3453{' '}
+        </Typography>{' '}
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell size="medium">Ticker</TableCell>
+              <TableCell size="medium" align="right">
+                # Shares
+              </TableCell>
+              <TableCell size="medium" align="right">
+                Current Value
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.userHoldings &&
+              this.props.userHoldings.sort().map(eachHolding => {
+                return (
+                  <TableRow key={eachHolding.ticker}>
+                    <TableCell>{eachHolding.ticker}</TableCell>
+                    <TableCell align="center">{eachHolding.quantity}</TableCell>
+                    <TableCell align="center">currentValue</TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </Card>
     );
   }
 }
@@ -63,8 +53,9 @@ const styles = {
     padding: '40px',
     margin: '90px',
   },
-  text: {
-    width: 250,
+  table: {
+    overflowX: 'auto',
+    overflowY: 'auto',
   },
 };
 

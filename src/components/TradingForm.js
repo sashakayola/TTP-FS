@@ -60,8 +60,8 @@ class TradingForm extends Component {
         this.setState({
           userCashBalance: data.updatedUserBalance,
         });
-        const holdings = await axios.get(`api/users/${userId}/holdings`)
-        console.log(holdings.data)
+        const holdings = await axios.get(`api/users/${userId}/holdings`);
+        this.props.getCurrentHoldings(holdings.data);
       } catch (error) {
         this.setState({
           authError: error,
