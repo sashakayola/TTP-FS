@@ -33,6 +33,21 @@ const findById = async id => {
   return user;
 };
 
+const updateUserCash = async (id, transactionType, quantity, price) => {
+  let user = await User.findByPk(id);
+  let balance = user.dataValues.balance
+  let totalAmount = quantity * price;
+
+  if (transactionType === 'buy') {
+    let newBalance = balance - totalAmount;
+    User.update({ balance: newBalance}, {where: {id}})
+  } else { // else transaction is a sell
+    let newBalance = balance + totalAmount;
+    User.update({ balance: newBalance}, {where: {id}})
+  }
+};
+
 module.exports.createUser = createUser;
 module.exports.findByEmail = findByEmail;
 module.exports.findById = findById;
+module.exports.updateUserCash = updateUserCash;
