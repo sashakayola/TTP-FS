@@ -8,4 +8,4 @@ User.hasMany(Holdings)
 Transactions.belongsTo(User)
 User.hasMany(Transactions)
 
-module.exports = { User }
+module.exports = { User, Transactions, Holdings }

@@ -1,6 +1,6 @@
-const {
+const
   User
-} = require('../db/models');
+ = require('../db/models/user');
 
 const createUser = async (
   firstName,

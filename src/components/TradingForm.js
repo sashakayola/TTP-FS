@@ -5,8 +5,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import axios from 'axios';
+import AuthContext from '../AuthContext';
 
 class TradingForm extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +17,19 @@ class TradingForm extends Component {
       quantityError: null,
     };
   }
+
+  componentDidMount = async () => {
+    let user = await axios.get(`/api/users/${this.context.userId}`);
+    console.log(user);
+    this.setState({
+      userCashBalance: user.data.balance,
+    });
+  };
+
   handleSubmit = async event => {
+    event.preventDefault();
+    const { userId } = this.context;
+
     const getFormData = event => {
       return {
         ticker: event.target.ticker.value,
@@ -22,28 +37,34 @@ class TradingForm extends Component {
       };
     };
 
-    try {
-      event.preventDefault();
-      const { ticker, quantity } = getFormData(event);
-      if (quantity < 1) {
-        this.setState({
-          quantityError: 'Negative or zero shares not allowed',
-        });
-      } else {
-        let data = await axios.get(`api/stocks/${ticker}`);
-        console.log(data.data.latestPrice);
-        console.log(data.data.open);
-        this.setState({
-          authError: null,
-          quantityError: null,
-        });
-        this.resetForm();
-      }
-    } catch (authError) {
+    const { ticker, quantity } = getFormData(event);
+
+    // clear form from when user previously submitted transaction
+    this.resetForm();
+    this.setState({
+      authError: null,
+      quantityError: null,
+      userBalanceError: null,
+    });
+
+    if (quantity < 1) {
       this.setState({
-        authError,
+        quantityError: 'Negative or zero shares not allowed',
       });
-      return;
+    } else {
+      try {
+        const { data } = await axios.post('api/stock/', {
+          ticker,
+          quantity,
+          userId,
+        });
+        // console.log(data.data.latestPrice);
+        // console.log(data.data.open);
+      } catch (error) {
+        this.setState({
+          authError: error,
+        });
+      }
     }
   };
 
@@ -66,8 +87,10 @@ class TradingForm extends Component {
               spacing={2}
             >
               <Grid item>
-                <Typography variant="h5"> Cash: $4000 </Typography>{' '}
-              </Grid>{' '}
+                <Typography variant="h5">
+                  Cash: ${this.state.userCashBalance}
+                </Typography>{' '}
+              </Grid>
               <Grid item>
                 <TextField
                   id="ticker"
@@ -77,7 +100,7 @@ class TradingForm extends Component {
                   margin="normal"
                   variant="outlined"
                 />
-              </Grid>{' '}
+              </Grid>
               <Grid item>
                 <TextField
                   id="quantity"
@@ -87,11 +110,11 @@ class TradingForm extends Component {
                   margin="normal"
                   variant="outlined"
                 />
-              </Grid>{' '}
+              </Grid>
               <Grid item>
                 {' '}
-                {this.state.error && (
-                  <div> {this.state.error.response.data} </div>
+                {this.state.authError && (
+                  <div> {this.state.authError.response.data} </div>
                 )}{' '}
               </Grid>{' '}
               <Grid item>
@@ -107,7 +130,7 @@ class TradingForm extends Component {
                   size="large"
                   type="submit"
                 >
-                  Buy{' '}
+                  Buy
                 </Button>{' '}
               </Grid>{' '}
             </Grid>{' '}

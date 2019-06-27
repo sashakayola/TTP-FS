@@ -13,8 +13,12 @@ const Transactions = db.define('transactions', {
       min: 0,
     },
   },
-  priceBought: {
+  price: { // price bought or sold
     type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  transactionType: { // buy or sell
+    type: Sequelize.STRING,
     allowNull: false
   },
   createdAt: {
