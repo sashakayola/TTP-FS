@@ -41,8 +41,8 @@ class TradingForm extends Component {
               spacing={2}
             >
               <Grid item>
-                <Typography variant="h5">
-                  Cash: $
+                <Typography variant="h5" color="primary">
+                  Cash Balance: $
                   {this.props.userCashBalance.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
                   })}

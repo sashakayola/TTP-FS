@@ -14,7 +14,7 @@ class Transactions extends Component {
 
     return (
       <Card className={classes.card}>
-        <Typography variant="h5" align="center" padding='50px' color='primary'>
+        <Typography variant="h5" align="center" color='primary'>
           Transactions
         </Typography>{' '}
         <Table className={classes.table}>
@@ -22,7 +22,7 @@ class Transactions extends Component {
             <TableRow>
               <TableCell size="small" align="left">Ticker</TableCell>
               <TableCell size="small" align="left">
-                Transaction Type
+                Type
               </TableCell>
               <TableCell size="small" align="left">
                 Transaction Date
@@ -39,7 +39,7 @@ class Transactions extends Component {
             {this.props.userTransactions &&
               this.props.userTransactions
                 .sort(function(a, b) {
-                  if (a.updatedAt < b.updatedAt) {
+                  if (a.updatedAt > b.updatedAt) {
                     return -1;
                   } else return 1;
                 })
@@ -73,7 +73,7 @@ class Transactions extends Component {
 const styles = {
   card: {
     padding: '30px',
-    margin: '50px',
+    margin: '30px',
   },
   table: {
     overflowX: 'auto',

@@ -13,9 +13,9 @@ function Portfolio(props) {
 
   return (
       <Card className={classes.card}>
-        <Typography variant="h5" align="center">
+        <Typography variant="h5" align="center" color="primary">
           {' '}
-          Portfolio: ${totalValue.toLocaleString(undefined, {maximumFractionDigits:2})}
+          Portfolio Value: ${totalValue.toLocaleString(undefined, {maximumFractionDigits:2})}
         </Typography>{' '}
         <Table className={classes.table}>
           <TableHead>

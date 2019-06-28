@@ -14,19 +14,21 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       userHoldings: [],
+      userTransactions: [],
       userCashBalance: 5000,
       error: null,
-      userTransactions: [],
     };
   }
 
   componentDidMount = async () => {
     let { userId } = this.context;
     const userHoldings = await this.fetchUserHoldings(userId);
+    const userTransactions = await this.fetchUserTransactions(userId);
     let userCashBalance = await this.fetchUserCashBalance(userId);
     this.setState({
       userHoldings,
-      userCashBalance,
+        userTransactions,
+        userCashBalance,
     });
   };
 
@@ -61,8 +63,8 @@ class Dashboard extends Component {
       let userCashBalance = await this.fetchUserCashBalance(userId);
       this.setState({
         userHoldings,
-        userCashBalance,
         userTransactions,
+        userCashBalance,
       });
     } catch (error) {
       this.setState({
