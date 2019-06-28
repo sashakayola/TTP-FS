@@ -11,6 +11,7 @@ import AuthContext from '../AuthContext';
 class Navbar extends Component {
   static contextType = AuthContext;
   render() {
+    // console.log(this.props.history.location.pathname)
     const { classes } = this.props;
     const { isAuth } = this.context;
     return (
@@ -51,7 +52,7 @@ class Navbar extends Component {
                     size="medium"
                     className={classes.button}
                     component={Link}
-                    to="/"
+                    to="/login"
                   >
                     {' '}
                     Logout{' '}

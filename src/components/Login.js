@@ -96,7 +96,7 @@ class Login extends Component {
                   )}{' '}
                   <Grid item>
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
                       size="large"
                       type="submit"

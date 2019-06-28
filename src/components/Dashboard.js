@@ -4,9 +4,11 @@
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Transactions from './Transactions';
-import Portfolio from './Portfolio';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
+import TradingForm from './TradingForm';
+import Portfolio from './Portfolio';
+import { Grid } from '@material-ui/core';
 
 class Dashboard extends Component {
   static contextType = AuthContext;
@@ -15,32 +17,58 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       userHoldings: [],
-      // error: {}
+      userCashBalance: 5000,
+      error: null,
     };
   }
 
   componentDidMount = async () => {
     let { userId } = this.context;
     const userHoldings = await this.fetchUserHoldings(userId);
+    let userCashBalance = await this.fetchUserCashBalance(userId);
     this.setState({
       userHoldings,
+      userCashBalance,
     });
+  };
+
+  fetchUserCashBalance = async userId => {
+    let user = await axios.get(`/api/users/${this.context.userId}`);
+    return Number(user.data.balance);
   };
 
   fetchUserHoldings = async userId => {
     const response = await axios.get(`api/users/${userId}/holdings`);
-    console.log("RESPONSE", response)
     return await this.appendCurrentPrice(response.data);
   };
 
-  updateUserHoldings = userHoldings => {
-    this.setState({
-      userHoldings,
-    });
-  };
+  // updateUserHoldings = userHoldings => {
+  //   this.setState({
+  //     userHoldings,
+  //   });
+  // };
 
-  handleNewTransaction = async () => {
+  handleNewTransaction = async (ticker, quantity) => {
     let { userId } = this.context;
+    this.setState({
+      error: null,
+    });
+    try {
+      await axios.post(`api/users/${userId}/transactions`, {
+        ticker,
+        quantity,
+      });
+      const userHoldings = await this.fetchUserHoldings(userId);
+      let userCashBalance = await this.fetchUserCashBalance(userId);
+      this.setState({
+        userHoldings,
+        userCashBalance,
+      });
+    } catch (error) {
+      this.setState({
+        error,
+      });
+    }
     // this.setState({...this.state, error: {}});
 
     // axios.post()
@@ -52,10 +80,6 @@ class Dashboard extends Component {
     //     userHoldings,
     //   });
     // }
-    const userHoldings = await this.fetchUserHoldings(userId);
-    this.setState({
-      userHoldings,
-    });
   };
 
   getStockPriceInfo = async ticker => {
@@ -87,24 +111,36 @@ class Dashboard extends Component {
 
   render() {
     const { classes } = this.props;
-    // const totalValue = this.calculateTotalValue(this.state.userHoldings);
+    const totalValue = this.calculateTotalValue(this.state.userHoldings);
     // console.log(totalValue);
 
     console.log(this.props.location.pathname);
     return (
       <div className={classes.mainContent}>
-      {this.props.location.pathname === '/dashboard/portfolio' &&
-          <Portfolio
-            // userHoldings={this.state.userHoldings}
-            // totalValue={totalValue}
-            // onSubmit={this.handleNewTransaction}
-            // error={this.state.error}
-          />
-      }
-      {this.props.location.pathname === '/dashboard/transactions' &&
-          <Transactions />
-      }
+        {this.props.location.pathname === '/dashboard/portfolio' && (
+          <Grid
+            container
+            className={classes.mainContent}
+            justify="center"
+            alignItems="center"
+            direction="row"
+            spacing={5}
+          >
+            <Portfolio
+              userHoldings={this.state.userHoldings}
+              totalValue={totalValue}
+            />
+            <TradingForm
+              userCashBalance={this.state.userCashBalance}
+              onSubmit={this.handleNewTransaction}
+              error={this.state.error}
+            />
+          </Grid>
+        )}
 
+        {this.props.location.pathname === '/dashboard/transactions' && (
+          <Transactions />
+        )}
       </div>
     );
   }

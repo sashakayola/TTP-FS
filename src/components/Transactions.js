@@ -58,7 +58,7 @@ class Transactions extends Component {
                       </TableCell>
                     </TableRow> */}
                   {/* );
-                })} */} */
+                })} */}
           </TableBody>
         </Table>
       </Card>
@@ -69,7 +69,7 @@ class Transactions extends Component {
 const styles = {
   card: {
     padding: '40px',
-    margin: '90px',
+    margin: '100px',
   },
   table: {
     overflowX: 'auto',
