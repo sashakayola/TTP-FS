@@ -16,7 +16,7 @@ class CurrentHoldings extends Component {
       <Card className={classes.card}>
         <Typography variant="h5" align="center">
           {' '}
-          Portfolio: ${this.props.totalValue.toFixed(2)}
+          Portfolio: ${this.props.totalValue.toLocaleString(undefined, {maximumFractionDigits:2})}
         </Typography>{' '}
         <Table className={classes.table}>
           <TableHead>
@@ -49,11 +49,11 @@ class CurrentHoldings extends Component {
                       <TableCell className={style}>
                         {eachHolding.ticker}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         {eachHolding.quantity}
                       </TableCell>
-                      <TableCell align="center" className={style}>
-                        {eachHolding.currentValue.toFixed(4)}
+                      <TableCell align="left" className={style}>
+                        {eachHolding.currentValue.toLocaleString(undefined, {maximumFractionDigits:4})}
                       </TableCell>
                     </TableRow>
                   );

@@ -56,10 +56,9 @@ class TradingForm extends Component {
       });
     } else {
       try {
-        const { data } = await axios.post('api/stock/buy', {
+        const { data } = await axios.post(`api/users/${userId}/transactions`, {
           ticker,
           quantity,
-          userId,
         });
         this.setState({
           userCashBalance: data.updatedUserBalance,
@@ -95,7 +94,7 @@ class TradingForm extends Component {
             >
               <Grid item>
                 <Typography variant="h5">
-                  Cash: ${this.state.userCashBalance.toFixed(2)}
+                  Cash: ${this.state.userCashBalance.toLocaleString(undefined, {maximumFractionDigits:2})}
                 </Typography>{' '}
               </Grid>
               <Grid item>

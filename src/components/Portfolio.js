@@ -56,7 +56,7 @@ class Portfolio extends Component {
   };
 
   getStockPriceInfo = async ticker => {
-    const response = await axios.get(`api/stock/${ticker}`);
+    const response = await axios.get(`api/prices/${ticker}`);
     const openPrice = response.data.open;
     const currentPrice = response.data.latestPrice;
     return { openPrice, currentPrice };
