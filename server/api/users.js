@@ -99,7 +99,7 @@ router.post('/:userId/transactions', async (req, res, next) => {
   let canBuy = await verifyBuy(userId, quantity, latestPrice);
 
   if (canBuy) {
-    let transactionType = 'buy';
+    let transactionType = 'Buy';
     await createTransaction(
       ticker,
       quantity,

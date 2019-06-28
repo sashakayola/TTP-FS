@@ -14,51 +14,55 @@ class Transactions extends Component {
 
     return (
       <Card className={classes.card}>
-        <Typography variant="h5" align="center">
+        <Typography variant="h5" align="center" padding='50px' color='primary'>
           Transactions
         </Typography>{' '}
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell size="medium">Ticker</TableCell>
-              <TableCell size="medium" align="right">
+              <TableCell size="small" align="left">Ticker</TableCell>
+              <TableCell size="small" align="left">
                 Transaction Type
               </TableCell>
-              <TableCell size="medium" align="right">
+              <TableCell size="small" align="left">
+                Transaction Date
+              </TableCell>
+              <TableCell size="small" align="left">
                 # Shares
               </TableCell>
-              <TableCell size="medium" align="right">
+              <TableCell size="small" align="left">
                 Price
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {this.props.userHoldings &&
-              this.props.userHoldings
+            {this.props.userTransactions &&
+              this.props.userTransactions
                 .sort(function(a, b) {
-                  if (a.ticker < b.ticker) {
+                  if (a.updatedAt < b.updatedAt) {
                     return -1;
                   } else return 1;
                 })
                 .map(eachHolding => {
                   return (
                     <TableRow key={eachHolding.ticker}>
-                      <TableCell>
-                        {eachHolding.ticker}
+                      <TableCell>{eachHolding.ticker}</TableCell>
+                      <TableCell align="left">
+                        {eachHolding.transactionType}
                       </TableCell>
                       <TableCell align="left">
-                        {eachHolding.quantity}
+                        {eachHolding.createdAt}
                       </TableCell>
+                      <TableCell align="left">{eachHolding.quantity}</TableCell>
                       <TableCell align="left">
-                        Buy
+                        $
+                        {eachHolding.price.toLocaleString(undefined, {
+                          maximumFractionDigits: 4,
+                        })}
                       </TableCell>
-                      <TableCell align="left">
-                        {/* {eachHolding.currentValue.toLocaleString(undefined, {maximumFractionDigits:4})} */}
-                        {/* price bought
-                      </TableCell>
-                    </TableRow> */}
-                  {/* );
-                })} */}
+                    </TableRow>
+                  );
+                })}
           </TableBody>
         </Table>
       </Card>
@@ -68,8 +72,8 @@ class Transactions extends Component {
 
 const styles = {
   card: {
-    padding: '40px',
-    margin: '100px',
+    padding: '30px',
+    margin: '50px',
   },
   table: {
     overflowX: 'auto',

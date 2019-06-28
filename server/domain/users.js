@@ -36,7 +36,7 @@ const updateUserCash = async (id, transactionType, quantity, price) => {
   let balance = user.dataValues.balance;
   let totalAmount = quantity * price;
 
-  if (transactionType === 'buy') {
+  if (transactionType === 'Buy') {
     let newBalance = balance - totalAmount;
     User.update({ balance: newBalance }, { where: { id } });
     return newBalance;

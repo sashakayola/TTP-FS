@@ -126,7 +126,17 @@ class Dashboard extends Component {
         )}
 
         {this.props.location.pathname === '/dashboard/transactions' && (
+          <Grid
+            container
+            className={classes.mainContent}
+            justify="center"
+            alignItems="center"
+            direction="row"
+            spacing={5}
+          >
           <Transactions userTransactions={this.state.userTransactions} />
+          </Grid>
+
         )}
       </div>
     );
