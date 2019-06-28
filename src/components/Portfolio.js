@@ -19,6 +19,7 @@ class Portfolio extends Component {
 
   componentDidMount = async () => {
     let { userId } = this.context;
+    console.log("USER ID", userId)
     const userHoldings = await this.fetchUserHoldings(userId);
     this.setState({
       userHoldings,

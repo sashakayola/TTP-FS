@@ -31,7 +31,7 @@ class Navbar extends Component {
                     variant="outlined"
                     className={classes.button}
                     component={Link}
-                    to="/transactions"
+                    to="/dashboard/transactions"
                   >
                     {' '}
                     Transactions{' '}
@@ -42,7 +42,7 @@ class Navbar extends Component {
                     variant="outlined"
                     className={classes.button}
                     component={Link}
-                    to="/portfolio"
+                    to="/dashboard/portfolio"
                   >
                     Portfolio{' '}
                   </Button>{' '}

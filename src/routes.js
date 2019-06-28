@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { Signup, Transactions, Login, Portfolio } from './components';
+import { Signup, Dashboard, Login } from './components';
 import AuthContext from './AuthContext';
 
 export default class Routes extends Component {
@@ -14,8 +14,8 @@ export default class Routes extends Component {
       <Switch>
         {isAuth && (
           <Switch>
-            <Route exact path="/portfolio" component={Portfolio} />
-            <Route exact path="/transactions" component={Transactions} />
+            <Route exact path="/dashboard/portfolio" component={Dashboard} />
+            <Route exact path="/dashboard/transactions" component={Dashboard} />
           </Switch>
         )}
         <Route exact path="/signup" component={Signup} />{' '}
