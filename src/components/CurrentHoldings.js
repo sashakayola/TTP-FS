@@ -7,43 +7,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import axios from 'axios'
 
 class CurrentHoldings extends Component {
-  constructor(props) {
-    super(props)
-    this.state = ({
-      userHoldings: null
-    })
-  }
-
-  getStockInfo = async (ticker) => {
-    let response = await axios.get(`api/stock/${ticker}`)
-    console.log(response.data.open)
-    console.log(response.data.latestPrice)
-    return response;
-  }
-
-  componentDidMount = async () => {
-    let tempState = []
-    this.props.userHoldings &&
-
-    (this.props.userHoldings.forEach((eachHolding) => {
-      console.log(eachHolding.ticker)
-      let stockInfo = this.getStockInfo(eachHolding.ticker)
-      let currentValue = stockInfo.data.latestPrice * eachHolding.quantity
-      tempState.push(
-        {ticker: eachHolding.ticker,
-        quantity: eachHolding.quantity,
-        currentValue
-       }
-      )
-    }))
-    this.setState({
-      userHoldings: tempState
-    })
-  }
-
   render() {
     const { classes } = this.props;
 
@@ -51,7 +16,7 @@ class CurrentHoldings extends Component {
       <Card className={classes.card}>
         <Typography variant="h5" align="center">
           {' '}
-          Portfolio: $3453{' '}
+          Portfolio: ${this.props.totalValue.toFixed(2)}
         </Typography>{' '}
         <Table className={classes.table}>
           <TableHead>
@@ -66,17 +31,33 @@ class CurrentHoldings extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.userHoldings &&
-              this.state.userHoldings.sort().map(eachHolding => {
-                {/* const currentPrice = this.getStockInfo(eachHolding.ticker) */}
-                return (
-                  <TableRow key={eachHolding.ticker}>
-                    <TableCell>{eachHolding.ticker}</TableCell>
-                    <TableCell align="center">{eachHolding.quantity}</TableCell>
-                    <TableCell align="center">{this.getStockInfo(eachHolding.currentValue)}</TableCell>
-                  </TableRow>
-                );
-              })}
+            {this.props.userHoldings &&
+              this.props.userHoldings
+                .sort(function(a, b) {
+                  if (a.ticker < b.ticker) {
+                    return -1;
+                  } else return 1;
+                })
+                .map(eachHolding => {
+                  let color = eachHolding.color;
+                  let style = classes.tableCellgrey;
+                  color === 'red'
+                    ? (style = classes.tableCellred)
+                    : (style = classes.tableCellgreen);
+                  return (
+                    <TableRow key={eachHolding.ticker}>
+                      <TableCell className={style}>
+                        {eachHolding.ticker}
+                      </TableCell>
+                      <TableCell align="center">
+                        {eachHolding.quantity}
+                      </TableCell>
+                      <TableCell align="center" className={style}>
+                        {eachHolding.currentValue.toFixed(4)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
           </TableBody>
         </Table>
       </Card>
@@ -92,6 +73,15 @@ const styles = {
   table: {
     overflowX: 'auto',
     overflowY: 'auto',
+  },
+  tableCellred: {
+    color: 'RED',
+  },
+  tableCellgreen: {
+    color: 'GREEN',
+  },
+  tableCellgrey: {
+    color: 'GREY',
   },
 };
 

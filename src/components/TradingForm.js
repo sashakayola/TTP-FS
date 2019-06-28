@@ -21,8 +21,9 @@ class TradingForm extends Component {
 
   componentDidMount = async () => {
     let user = await axios.get(`/api/users/${this.context.userId}`);
+    console.log(typeof user.data.balance);
     this.setState({
-      userCashBalance: user.data.balance,
+      userCashBalance: Number(user.data.balance),
     });
   };
 
@@ -36,6 +37,9 @@ class TradingForm extends Component {
         quantity: event.target.quantity.value,
       };
     };
+
+    // this.props.onSubmit(ticker, quantity);
+    // this.setState({quantity:0, ticker:''});
 
     const { ticker, quantity } = getFormData(event);
 
@@ -60,8 +64,8 @@ class TradingForm extends Component {
         this.setState({
           userCashBalance: data.updatedUserBalance,
         });
-        const holdings = await axios.get(`api/users/${userId}/holdings`);
-        this.props.getCurrentHoldings(holdings.data);
+        // const holdings = await axios.get(`api/users/${userId}/holdings`);
+        this.props.onSubmit();
       } catch (error) {
         this.setState({
           authError: error,
@@ -76,6 +80,7 @@ class TradingForm extends Component {
 
   render() {
     const { classes } = this.props;
+    // const validQuantity = this.state.quantity > 0;
 
     return (
       <div>
@@ -90,13 +95,16 @@ class TradingForm extends Component {
             >
               <Grid item>
                 <Typography variant="h5">
-                  Cash: ${this.state.userCashBalance}
+                  Cash: ${this.state.userCashBalance.toFixed(2)}
                 </Typography>{' '}
               </Grid>
               <Grid item>
                 <TextField
                   id="ticker"
                   required
+                  // value={this.state.ticker}
+                  // onChange={(event) => this.setState({...this.state, ticker: event.target.value})}
+                  // error={!validQuantity}
                   label="Ticker symbol"
                   type="string"
                   margin="normal"
@@ -131,6 +139,7 @@ class TradingForm extends Component {
                   color="secondary"
                   size="large"
                   type="submit"
+                  // disabled={!validQuantity}
                 >
                   Buy
                 </Button>{' '}

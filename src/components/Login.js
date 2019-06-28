@@ -39,7 +39,7 @@ class Login extends Component {
       login(user.data.id);
       this.props.history.push('/portfolio');
     } catch (authError) {
-      console.log(authError);
+      console.error(authError);
       this.setState({
         error: authError,
       });

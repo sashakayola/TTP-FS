@@ -21,7 +21,7 @@ const User = db.define('user', {
   },
   balance: {
     // potentially change the type to numeric
-    type: Sequelize.NUMERIC,
+    type: Sequelize.DOUBLE,
     validate: {
       min: 0,
     },

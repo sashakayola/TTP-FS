@@ -1,5 +1,4 @@
 import React from 'react';
-
 const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
