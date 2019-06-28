@@ -1,15 +1,16 @@
 const Holdings = require('../db/models/holdings');
 
-const getHoldings = async (userId) => {
+// get all holdings associated with a user id
+const getHoldings = async userId => {
   try {
-    const currentHoldings = await Holdings.findAll({ where: { userId}});
+    const currentHoldings = await Holdings.findAll({ where: { userId } });
     return currentHoldings;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-// add stock to portfolio
+// add stock to a user's portfolio
 const addToHoldings = async (ticker, quantity, userId) => {
   try {
     const stock = await Holdings.findOne({ where: { userId, ticker: ticker } });

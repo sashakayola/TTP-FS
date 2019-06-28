@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { createUser, findByEmail, findById } = require('../domain/users');
 const { getHoldings } = require('../domain/holdings');
+const { getTransactions } = require('../domain/transactions');
 const { getStockInfo } = require('../domain/iex');
 const { createTransaction } = require('../domain/transactions');
 const { verifyBuy } = require('../domain/transactions');
@@ -13,7 +14,7 @@ router.post('/', async (req, res, next) => {
       req.body.firstName,
       req.body.lastName,
       req.body.email,
-      req.body.password
+      req.body.password,
     );
 
     // to establish login session. after login complete, user will be assigned to req.user
@@ -55,7 +56,7 @@ router.get('/:userId', async (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      balance: user.balance
+      balance: user.balance,
     });
   } catch (error) {
     next(error);
@@ -72,6 +73,15 @@ router.get('/:userId/holdings', async (req, res, next) => {
   }
 });
 
+router.get('/:userId/transactions', async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const transactions = await getTransactions(userId);
+    res.status(200).send(transactions);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post('/:userId/transactions', async (req, res, next) => {
   const ticker = req.body.ticker;

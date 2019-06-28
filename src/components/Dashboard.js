@@ -1,6 +1,3 @@
-// /dashboard/portfolio
-// /dashboard/transactions
-
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Transactions from './Transactions';
@@ -19,6 +16,7 @@ class Dashboard extends Component {
       userHoldings: [],
       userCashBalance: 5000,
       error: null,
+      userTransactions: [],
     };
   }
 
@@ -42,11 +40,10 @@ class Dashboard extends Component {
     return await this.appendCurrentPrice(response.data);
   };
 
-  // updateUserHoldings = userHoldings => {
-  //   this.setState({
-  //     userHoldings,
-  //   });
-  // };
+  fetchUserTransactions = async userId => {
+    const response = await axios.get(`api/users/${userId}/transactions`);
+    return response.data;
+  };
 
   handleNewTransaction = async (ticker, quantity) => {
     let { userId } = this.context;
@@ -59,27 +56,19 @@ class Dashboard extends Component {
         quantity,
       });
       const userHoldings = await this.fetchUserHoldings(userId);
+      const userTransactions = await this.fetchUserTransactions(userId);
+      console.log('user transactions', userTransactions);
       let userCashBalance = await this.fetchUserCashBalance(userId);
       this.setState({
         userHoldings,
         userCashBalance,
+        userTransactions,
       });
     } catch (error) {
       this.setState({
         error,
       });
     }
-    // this.setState({...this.state, error: {}});
-
-    // axios.post()
-    // if !response.ok {
-    //   this.setState({...this.state, error: {type: 'giusdbuf', message: 'saidhauf'}})
-    // } else {
-    //   const userHoldings = await this.fetchUserHoldings();
-    //   this.setState({
-    //     userHoldings,
-    //   });
-    // }
   };
 
   getStockPriceInfo = async ticker => {
@@ -112,9 +101,7 @@ class Dashboard extends Component {
   render() {
     const { classes } = this.props;
     const totalValue = this.calculateTotalValue(this.state.userHoldings);
-    // console.log(totalValue);
 
-    console.log(this.props.location.pathname);
     return (
       <div className={classes.mainContent}>
         {this.props.location.pathname === '/dashboard/portfolio' && (
@@ -139,7 +126,7 @@ class Dashboard extends Component {
         )}
 
         {this.props.location.pathname === '/dashboard/transactions' && (
-          <Transactions />
+          <Transactions userTransactions={this.state.userTransactions} />
         )}
       </div>
     );
