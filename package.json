@@ -19,7 +19,6 @@
     "passport": "^0.4.0",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
-    "prettier": "^1.18.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
@@ -36,7 +35,8 @@
     "@babel/polyfill": "^7.4.3",
     "@babel/register": "^7.4.0",
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "prettier": "^1.18.2"
   },
   "scripts": {
     "dev": "export NODE_ENV=development && concurrently \"nodemon --watch server server\" \"npm run start-client\"",
@@ -62,5 +62,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "semi": true
   }
 }

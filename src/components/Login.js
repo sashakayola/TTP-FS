@@ -4,10 +4,12 @@ import { Grid, Input } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
-import backgroundImage from '../assets/backgroundImage.jpg';
 import axios from 'axios';
+import AuthContext from '../AuthContext';
 
 class Login extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +18,7 @@ class Login extends Component {
   }
 
   handleSubmit = async event => {
+    const { login } = this.context;
     const getFormData = event => {
       return {
         email: event.target.email.value,
@@ -25,13 +28,18 @@ class Login extends Component {
 
     try {
       event.preventDefault();
+      this.setState({
+        error: null,
+      });
       const { email, password } = getFormData(event);
-      await axios.post('api/users/login/', {
+      const user = await axios.post('api/users/login/', {
         email,
         password,
       });
-      this.props.history.push('/transactions');
+      login(user.data.id);
+      this.props.history.push('/portfolio');
     } catch (authError) {
+      console.error(authError);
       this.setState({
         error: authError,
       });
@@ -50,36 +58,36 @@ class Login extends Component {
         <Grid
           container
           className={classes.mainContent}
-          justify='center'
-          alignItems='center'
-          direction='column'
+          justify="center"
+          alignItems="center"
+          direction="column"
         >
           <Grid item>
             <Card className={classes.card}>
-              <form name='signup' onSubmit={this.handleSubmit}>
+              <form id="login" onSubmit={this.handleSubmit}>
                 <Grid
                   container
-                  justify='center'
-                  alignItems='center'
-                  direction='column'
+                  justify="center"
+                  alignItems="center"
+                  direction="column"
                   spacing={4}
                 >
                   <Grid item>
-                    <Typography variant='h5'> Welcome back </Typography>{' '}
+                    <Typography variant="h5"> Welcome back </Typography>{' '}
                   </Grid>{' '}
                   <Grid item>
                     <Input
-                      name='email'
-                      type='text'
-                      placeholder='Email'
+                      name="email"
+                      type="text"
+                      placeholder="Email"
                       className={classes.text}
                     />{' '}
                   </Grid>{' '}
                   <Grid item>
                     <Input
-                      name='password'
-                      type='password'
-                      placeholder='Password'
+                      name="password"
+                      type="password"
+                      placeholder="Password"
                       className={classes.text}
                     />{' '}
                   </Grid>{' '}
@@ -88,21 +96,21 @@ class Login extends Component {
                   )}{' '}
                   <Grid item>
                     <Button
-                      variant='outlined'
-                      color='primary'
-                      size='large'
-                      type='submit'
+                      variant="outlined"
+                      color="primary"
+                      size="large"
+                      type="submit"
                     >
                       Login{' '}
                     </Button>{' '}
                   </Grid>{' '}
                   <Grid item>
                     <Button
-                      color='secondary'
-                      size='small'
+                      color="secondary"
+                      size="small"
                       onClick={this.redirectToSignup}
                     >
-                      Not a client ? Sign up{' '}
+                      {'Not a client? Sign up'}{' '}
                     </Button>{' '}
                   </Grid>{' '}
                 </Grid>{' '}
@@ -119,9 +127,6 @@ const styles = {
   mainContent: {
     width: '100%',
     height: '100%',
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'top center',
   },
   card: {
     padding: '40px',

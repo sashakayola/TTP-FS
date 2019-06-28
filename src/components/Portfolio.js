@@ -1,93 +1,110 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import { Grid, Input, TextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import backgroundImage from '../assets/backgroundImage.jpg';
+import TradingForm from './TradingForm';
+import CurrentHoldings from './CurrentHoldings';
+import axios from 'axios';
+import AuthContext from '../AuthContext';
 
 class Portfolio extends Component {
+  static contextType = AuthContext;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      userHoldings: [],
+      // error: {}
+    };
+  }
+
+  componentDidMount = async () => {
+    let { userId } = this.context;
+    const userHoldings = await this.fetchUserHoldings(userId);
+    this.setState({
+      userHoldings,
+    });
+  };
+
+  fetchUserHoldings = async userId => {
+    const response = await axios.get(`api/users/${userId}/holdings`);
+    return await this.appendCurrentPrice(response.data);
+  };
+
+  updateUserHoldings = userHoldings => {
+    this.setState({
+      userHoldings,
+    });
+  };
+
+  handleNewTransaction = async () => {
+    let { userId } = this.context;
+    // this.setState({...this.state, error: {}});
+
+    // axios.post()
+    // if !response.ok {
+    //   this.setState({...this.state, error: {type: 'giusdbuf', message: 'saidhauf'}})
+    // } else {
+    //   const userHoldings = await this.fetchUserHoldings();
+    //   this.setState({
+    //     userHoldings,
+    //   });
+    // }
+    const userHoldings = await this.fetchUserHoldings(userId);
+    this.setState({
+      userHoldings,
+    });
+  };
+
+  getStockPriceInfo = async ticker => {
+    const response = await axios.get(`api/prices/${ticker}`);
+    const openPrice = response.data.open;
+    const currentPrice = response.data.latestPrice;
+    return { openPrice, currentPrice };
+  };
+
+  appendCurrentPrice = async assets => {
+    const pricedAssets = assets.map(async asset => {
+      const { openPrice, currentPrice } = await this.getStockPriceInfo(
+        asset.ticker,
+      );
+      const currentValue = currentPrice * asset.quantity;
+      let color = 'grey';
+      if (currentPrice < openPrice) color = 'red';
+      else if (currentPrice > openPrice) color = 'green';
+      return { ...asset, currentValue, color };
+    });
+    return await Promise.all(pricedAssets);
+  };
+
+  calculateTotalValue = assets => {
+    return assets.reduce((totalValue, asset) => {
+      return totalValue + asset.currentValue;
+    }, 0);
+  };
+
   render() {
     const { classes } = this.props;
+    const totalValue = this.calculateTotalValue(this.state.userHoldings);
+    console.log(totalValue);
+
     return (
       <div className={classes.mainContent}>
         <Grid
           container
           className={classes.mainContent}
-          justify='center'
-          alignItems='center'
-          direction='row'
+          justify="center"
+          alignItems="center"
+          direction="row"
           spacing={5}
         >
-          <Card className={classes.card}>
-            <Grid
-              container
-              justify='center'
-              alignItems='left'
-              direction='column'
-              spacing={4}
-            >
-              <Grid item>
-                <Typography variant='h5'> Current Portfolio </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 1 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 2 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 3 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 4 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <Typography variant='h7'> stock 5 </Typography>{' '}
-              </Grid>{' '}
-            </Grid>{' '}
-          </Card>{' '}
-          <Card className={classes.card}>
-            <Grid
-              container
-              justify='center'
-              alignItems='center'
-              direction='column'
-              spacing={2}
-            >
-              <Grid item>
-                <Typography variant='h5'> Cash: $4000 </Typography>{' '}
-              </Grid>{' '}
-              <Grid item>
-                <TextField
-                  id='tickerSymbol'
-                  label='Ticker symbol'
-                  type='tickerSymbol'
-                  margin='normal'
-                  variant='outlined'
-                />
-              </Grid>{' '}
-              <Grid item>
-                <TextField
-                  id='quantity'
-                  label='Number of shares'
-                  type='quantity'
-                  margin='normal'
-                  variant='outlined'
-                />
-              </Grid>{' '}
-              <Grid item>
-                <Button
-                  variant='outlined'
-                  color='primary'
-                  size='large'
-                  type='submit'
-                >
-                  Buy{' '}
-                </Button>{' '}
-              </Grid>{' '}
-            </Grid>{' '}
-          </Card>{' '}
+          <CurrentHoldings
+            userHoldings={this.state.userHoldings}
+            totalValue={totalValue}
+          />
+          <TradingForm
+            onSubmit={this.handleNewTransaction}
+            error={this.state.error}
+          />{' '}
         </Grid>{' '}
       </div>
     );
@@ -98,9 +115,6 @@ const styles = {
   mainContent: {
     width: '100%',
     height: '100%',
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'top center',
   },
   card: {
     padding: '30px',
