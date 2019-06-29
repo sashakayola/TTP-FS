@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 function Transactions(props) {
-  const { classes, userTransactions } = this.props;
+  const { classes, userTransactions } = props;
 
   return (
     <Card className={classes.card}>

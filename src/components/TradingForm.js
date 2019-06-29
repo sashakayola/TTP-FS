@@ -20,6 +20,7 @@ class TradingForm extends Component {
   handleSubmit = async event => {
     event.preventDefault();
     this.setState({ quantity: 1, ticker: '' });
+    // adding a transaction handled in dashboard parent component
     await this.props.onSubmit(
       this.state.ticker,
       Number(this.state.quantity),
@@ -28,7 +29,7 @@ class TradingForm extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, userCashBalance, error } = this.props;
     const validQuantity =
       Number(this.state.quantity) > 0 &&
       !String(this.state.quantity).includes('.');
@@ -48,11 +49,11 @@ class TradingForm extends Component {
               <Grid item>
                 <Typography variant="h5" color="primary">
                   Cash Balance: $
-                  {this.props.userCashBalance.toLocaleString(undefined, {
+                  {userCashBalance.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </Typography>{' '}
+                </Typography>
               </Grid>
               <Grid item>
                 <TextField
@@ -86,16 +87,10 @@ class TradingForm extends Component {
                   variant="outlined"
                 />
               </Grid>
+              <Grid item>{error && <div> {error.response.data} </div>}</Grid>
               <Grid item>
-                {' '}
-                {this.props.error && (
-                  <div> {this.props.error.response.data} </div>
-                )}{' '}
-              </Grid>{' '}
-              <Grid item>
-                {' '}
-                {!validQuantity && <div> Positive whole shares only </div>}{' '}
-              </Grid>{' '}
+                {!validQuantity && <div> Positive whole shares only </div>}
+              </Grid>
               <Grid item>
                 <Button
                   variant="contained"
@@ -105,11 +100,11 @@ class TradingForm extends Component {
                   disabled={!validQuantity || emptyTicker}
                 >
                   Buy
-                </Button>{' '}
-              </Grid>{' '}
-            </Grid>{' '}
-          </form>{' '}
-        </Card>{' '}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Card>
       </div>
     );
   }

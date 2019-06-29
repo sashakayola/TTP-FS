@@ -15,7 +15,7 @@ class AuthProvider extends React.Component {
   // see if the user is authorized
   authorize = async () => {
     try {
-      let user = await axios.get('/api/auth/me');
+      const user = await axios.get('/api/auth/me');
       this.setState(
         {
           isAuth: true,
