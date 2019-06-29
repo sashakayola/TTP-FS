@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+// authorize user
 router.get('/me', (req, res) => {
   const user = req.session.passport;
   if (user) {

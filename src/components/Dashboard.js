@@ -68,8 +68,8 @@ class Dashboard extends Component {
   };
 
   fetchUserCashBalance = async userId => {
-    let user = await axios.get(`/api/users/${this.context.userId}`);
-    return Number(user.data.balance);
+    let response = await axios.get(`/api/users/${this.context.userId}`);
+    return Number(response.data.user.user.balance);
   };
 
   fetchUserHoldings = async userId => {

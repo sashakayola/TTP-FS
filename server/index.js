@@ -24,6 +24,7 @@ passport.deserializeUser(async (id, done) => {
     done(err);
   }
 });
+
 const createApp = () => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,7 +38,6 @@ const createApp = () => {
       resave: false,
       saveUninitialized: false,
       proxy: true,
-      // cookie: { maxAge: 80 * 80 * 60 * 1000, secure: false },
     }),
   );
 
