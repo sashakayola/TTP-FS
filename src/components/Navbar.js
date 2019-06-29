@@ -11,8 +11,6 @@ import AuthContext from '../AuthContext';
 class Navbar extends Component {
   static contextType = AuthContext;
 
-
-
   render() {
     const { classes } = this.props;
     const { isAuth, logout } = this.context;
