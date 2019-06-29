@@ -26,8 +26,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount = async () => {
+    const { userId } = this.context;
     this.setState({ canUpdatePrices: false });
-    const { userId, isAuth } = this.context;
 
     try {
       const userHoldings = await this.fetchUserHoldings(userId);
@@ -41,16 +41,7 @@ class Dashboard extends Component {
           canUpdatePrices: true,
         },
         () => {
-          const timer = setIntervalAsync(async () => {
-            if (
-              !this.state.canUpdatePrices ||
-              this.state.userHoldings.length < 1 ||
-              !isAuth
-            ) {
-              clearIntervalAsync(timer);
-            }
-            await this.fetchUpdatedStockPrices();
-          }, 5000);
+          this.setTimer();
         },
       );
     } catch (err) {
@@ -59,7 +50,7 @@ class Dashboard extends Component {
   };
 
   fetchUpdatedStockPrices = async () => {
-    let updatedHoldings = await this.appendCurrentPrice(
+    const updatedHoldings = await this.appendCurrentPrice(
       this.state.userHoldings,
     );
     this.setState({
@@ -87,7 +78,7 @@ class Dashboard extends Component {
   };
 
   handleNewTransaction = async (ticker, quantity, transactionType) => {
-    const { userId, isAuth } = this.context;
+    const { userId } = this.context;
     this.setState({
       error: null,
       canUpdatePrices: false,
@@ -110,16 +101,7 @@ class Dashboard extends Component {
           canUpdatePrices: true,
         },
         () => {
-          const timer = setIntervalAsync(async () => {
-            if (
-              !this.state.canUpdatePrices ||
-              this.state.userHoldings.length < 1 ||
-              !isAuth
-            ) {
-              clearIntervalAsync(timer);
-            }
-            await this.fetchUpdatedStockPrices();
-          }, 5000);
+          this.setTimer();
         },
       );
     } catch (error) {
@@ -129,7 +111,50 @@ class Dashboard extends Component {
     }
   };
 
-  getStockPriceInfo = async ticker => {
+  // set a timer to continuously grab up to date stock price
+  setTimer = () => {
+    const { isAuth } = this.context;
+    const timer = setIntervalAsync(async () => {
+      if (
+        !this.state.canUpdatePrices ||
+        this.state.userHoldings.length < 1 ||
+        !isAuth
+      ) {
+        clearIntervalAsync(timer);
+      }
+      await this.fetchUpdatedStockPrices();
+    }, 5000);
+  };
+
+  fetchUpdatedStockPrices = async () => {
+    const updatedHoldings = await this.appendCurrentPrice(
+      this.state.userHoldings,
+    );
+    this.setState({
+      userHoldings: updatedHoldings,
+    });
+  };
+
+  fetchUserCashBalance = async userId => {
+    const response = await axios.get(`/api/users/${userId}`);
+    return Number(response.data.user.user.balance);
+  };
+
+  fetchUserHoldings = async userId => {
+    const response = await axios.get(`api/users/${userId}/holdings`);
+    return await this.appendCurrentPrice(response.data);
+  };
+
+  fetchUserTransactions = async userId => {
+    try {
+      const response = await axios.get(`api/users/${userId}/transactions`);
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchStockPriceInfo = async ticker => {
     const response = await axios.get(`api/prices/${ticker}`);
     const openPrice = response.data.open;
     const currentPrice = response.data.latestPrice;
@@ -137,12 +162,13 @@ class Dashboard extends Component {
   };
 
   appendCurrentPrice = async assets => {
+    // for each stock in the user's portfolio, add on the current stock price
     const pricedAssets = assets.map(async asset => {
-      const { openPrice, currentPrice } = await this.getStockPriceInfo(
+      const { openPrice, currentPrice } = await this.fetchStockPriceInfo(
         asset.ticker,
       );
       const currentValue = currentPrice * asset.quantity;
-      let color = 'grey';
+      let color = 'grey'; // change color if current price > or < or === open price
       if (currentPrice < openPrice) color = 'red';
       else if (currentPrice > openPrice) color = 'green';
       return { ...asset, currentValue, color };
@@ -157,12 +183,13 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, location } = this.props;
     const totalValue = this.calculateTotalValue(this.state.userHoldings);
 
     return (
+      // dashboard is the parent component for the portfolio, trading form, and transactions components
       <div className={classes.mainContent}>
-        {this.props.location.pathname === '/dashboard/portfolio' && (
+        {location.pathname === '/dashboard/portfolio' && (
           <Grid
             container
             className={classes.mainContent}
@@ -183,7 +210,7 @@ class Dashboard extends Component {
           </Grid>
         )}
 
-        {this.props.location.pathname === '/dashboard/transactions' && (
+        {location.pathname === '/dashboard/transactions' && (
           <Grid
             container
             className={classes.mainContent}

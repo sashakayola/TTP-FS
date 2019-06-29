@@ -18,7 +18,7 @@ class Signup extends Component {
   }
 
   handleSubmit = async event => {
-    const { login } = this.context;
+    const { authorize } = this.context;
 
     const getFormData = event => {
       return {
@@ -41,7 +41,7 @@ class Signup extends Component {
         email,
         password,
       });
-      await login();
+      await authorize();
       this.props.history.push('dashboard/portfolio');
     } catch (authError) {
       this.setState({
@@ -60,7 +60,6 @@ class Signup extends Component {
 
     return (
       <div className={classes.mainContent}>
-        {' '}
         <Grid
           container
           className={classes.mainContent}
@@ -79,43 +78,43 @@ class Signup extends Component {
                   spacing={4}
                 >
                   <Grid item>
-                    <Typography variant="h5"> Register </Typography>{' '}
-                  </Grid>{' '}
+                    <Typography variant="h5"> Register </Typography>
+                  </Grid>
                   <Grid item>
                     <Input
                       name="firstName"
                       type="text"
                       placeholder="First Name"
                       className={classes.text}
-                    />{' '}
-                  </Grid>{' '}
+                    />
+                  </Grid>
                   <Grid item>
                     <Input
                       name="lastName"
                       type="text"
                       placeholder="Last Name"
                       className={classes.text}
-                    />{' '}
-                  </Grid>{' '}
+                    />
+                  </Grid>
                   <Grid item>
                     <Input
                       name="email"
                       type="text"
                       placeholder="Email"
                       className={classes.text}
-                    />{' '}
-                  </Grid>{' '}
+                    />
+                  </Grid>
                   <Grid item>
                     <Input
                       name="password"
                       type="password"
                       placeholder="Password"
                       className={classes.text}
-                    />{' '}
-                  </Grid>{' '}
+                    />
+                  </Grid>
                   {this.state.error && (
                     <div> {this.state.error.response.data} </div>
-                  )}{' '}
+                  )}
                   <Grid item>
                     <Button
                       variant="contained"
@@ -123,9 +122,9 @@ class Signup extends Component {
                       size="large"
                       type="submit"
                     >
-                      Sign Up{' '}
-                    </Button>{' '}
-                  </Grid>{' '}
+                      Sign Up
+                    </Button>
+                  </Grid>
                   <Grid item>
                     <Button
                       color="secondary"
@@ -133,13 +132,13 @@ class Signup extends Component {
                       onClick={this.redirectToLogin}
                     >
                       {'Already Registered?'}
-                    </Button>{' '}
-                  </Grid>{' '}
-                </Grid>{' '}
-              </form>{' '}
-            </Card>{' '}
-          </Grid>{' '}
-        </Grid>{' '}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </Card>
+          </Grid>
+        </Grid>
       </div>
     );
   }

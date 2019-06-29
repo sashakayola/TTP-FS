@@ -14,7 +14,6 @@ function Portfolio(props) {
   return (
     <Card className={classes.card}>
       <Typography variant="h5" align="center" color="primary">
-        {' '}
         Portfolio Value: $
         {totalValue.toLocaleString(undefined, {
           minimumFractionDigits: 2,
@@ -36,6 +35,7 @@ function Portfolio(props) {
         <TableBody>
           {userHoldings &&
             userHoldings
+              // sort holdings alpha order
               .sort(function(a, b) {
                 if (a.ticker < b.ticker) {
                   return -1;

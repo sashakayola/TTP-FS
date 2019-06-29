@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 const AuthContext = React.createContext();
 
+// context to authorize user (login & logout)
 class AuthProvider extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +12,8 @@ class AuthProvider extends React.Component {
     };
   }
 
-  login = async () => {
+  // see if the user is authorized
+  authorize = async () => {
     try {
       const user = await axios.get('/api/auth/me');
       this.setState(
@@ -28,6 +30,7 @@ class AuthProvider extends React.Component {
     }
   };
 
+  // log out user & set authorized to false
   logout = async () => {
     this.setState(
       {
@@ -44,12 +47,11 @@ class AuthProvider extends React.Component {
         value={{
           isAuth: this.state.isAuth,
           userId: this.state.userId,
-          login: this.login,
+          authorize: this.authorize,
           logout: this.logout,
         }}
       >
-        {' '}
-        {this.props.children}{' '}
+        {this.props.children}
       </AuthContext.Provider>
     );
   }

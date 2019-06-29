@@ -14,6 +14,7 @@ class Navbar extends Component {
   render() {
     const { classes } = this.props;
     const { isAuth, logout } = this.context;
+
     return (
       <div className={classes.root}>
         <AppBar color="white" position="sticky">
@@ -21,10 +22,10 @@ class Navbar extends Component {
             <Grid justify="space-between" container alignItems="center">
               <Grid item>
                 <Typography variant="h5" color="inherit">
-                  Stockfront{' '}
-                </Typography>{' '}
-              </Grid>{' '}
-              {isAuth ? (
+                  Stockfront
+                </Typography>
+              </Grid>
+              {isAuth ? ( // if the user is authorized, show the transactions, portfolio, and logout links
                 <Grid item>
                   <Button
                     color="primary"
@@ -34,9 +35,8 @@ class Navbar extends Component {
                     component={Link}
                     to="/dashboard/transactions"
                   >
-                    {' '}
-                    Transactions{' '}
-                  </Button>{' '}
+                    Transactions
+                  </Button>
                   <Button
                     color="primary"
                     size="medium"
@@ -45,8 +45,8 @@ class Navbar extends Component {
                     component={Link}
                     to="/dashboard/portfolio"
                   >
-                    Portfolio{' '}
-                  </Button>{' '}
+                    Portfolio
+                  </Button>
                   <Button
                     color="primary"
                     size="medium"
@@ -55,11 +55,11 @@ class Navbar extends Component {
                     to="/login"
                     onClick={async () => await logout()}
                   >
-                    {' '}
-                    Logout{' '}
-                  </Button>{' '}
+                    Logout
+                  </Button>
                 </Grid>
               ) : (
+                // the user is not authorized, only show login and sign up
                 <Grid item>
                   {' '}
                   <Button
@@ -70,9 +70,8 @@ class Navbar extends Component {
                     component={Link}
                     to="/login"
                   >
-                    {' '}
-                    Login{' '}
-                  </Button>{' '}
+                    Login
+                  </Button>
                   <Button
                     color="primary"
                     size="medium"
@@ -81,13 +80,12 @@ class Navbar extends Component {
                     component={Link}
                     to="/signup"
                   >
-                    {' '}
-                    Get Started{' '}
-                  </Button>{' '}
+                    Get Started
+                  </Button>
                 </Grid>
-              )}{' '}
-            </Grid>{' '}
-          </Toolbar>{' '}
+              )}
+            </Grid>
+          </Toolbar>
         </AppBar>
       </div>
     );
