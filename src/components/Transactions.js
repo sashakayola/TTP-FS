@@ -14,13 +14,15 @@ class Transactions extends Component {
 
     return (
       <Card className={classes.card}>
-        <Typography variant="h5" align="center" color='primary'>
+        <Typography variant="h5" align="center" color="primary">
           Transactions
         </Typography>{' '}
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell size="small" align="left">Ticker</TableCell>
+              <TableCell size="small" align="left">
+                Ticker
+              </TableCell>
               <TableCell size="small" align="left">
                 Type
               </TableCell>
@@ -56,8 +58,10 @@ class Transactions extends Component {
                       <TableCell align="left">{eachHolding.quantity}</TableCell>
                       <TableCell align="left">
                         $
-                        {Number(eachHolding.price).toLocaleString(undefined,
- {'minimumFractionDigits':2,'maximumFractionDigits':2})}
+                        {Number(eachHolding.price).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </TableCell>
                     </TableRow>
                   );

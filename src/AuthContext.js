@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
@@ -10,18 +11,31 @@ class AuthProvider extends React.Component {
     };
   }
 
-  login = async userId => {
-    await this.setState({
-      isAuth: true,
-      userId,
-    });
+  login = async () => {
+    try {
+      let user = await axios.get('/api/auth/me');
+      this.setState(
+        {
+          isAuth: true,
+          userId: Number(user.data.user),
+        },
+        () => {
+          console.log(user.data.user);
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  logout = () => {
-    this.setState({
-      isAuth: false,
-      userId: null,
-    });
+  logout = async () => {
+    this.setState(
+      {
+        isAuth: false,
+        userId: null,
+      },
+      async () => await axios.post('/api/users/logout'),
+    );
   };
 
   render() {

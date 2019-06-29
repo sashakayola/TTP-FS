@@ -20,13 +20,18 @@ class TradingForm extends Component {
   handleSubmit = async event => {
     event.preventDefault();
     this.setState({ quantity: 1, ticker: '' });
-    await this.props.onSubmit(this.state.ticker, Number(this.state.quantity), 'Buy');
+    await this.props.onSubmit(
+      this.state.ticker,
+      Number(this.state.quantity),
+      'Buy',
+    );
   };
 
   render() {
     const { classes } = this.props;
     const validQuantity =
-      Number(this.state.quantity) > 0 && !String(this.state.quantity).includes('.');
+      Number(this.state.quantity) > 0 &&
+      !String(this.state.quantity).includes('.');
     const emptyTicker = this.state.ticker === '';
 
     return (
@@ -43,8 +48,10 @@ class TradingForm extends Component {
               <Grid item>
                 <Typography variant="h5" color="primary">
                   Cash Balance: $
-                  {this.props.userCashBalance.toLocaleString(undefined,
- {'minimumFractionDigits':2,'maximumFractionDigits':2})}
+                  {this.props.userCashBalance.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </Typography>{' '}
               </Grid>
               <Grid item>

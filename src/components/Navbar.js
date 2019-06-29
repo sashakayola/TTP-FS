@@ -10,10 +10,12 @@ import AuthContext from '../AuthContext';
 
 class Navbar extends Component {
   static contextType = AuthContext;
+
+
+
   render() {
-    // console.log(this.props.history.location.pathname)
     const { classes } = this.props;
-    const { isAuth } = this.context;
+    const { isAuth, logout } = this.context;
     return (
       <div className={classes.root}>
         <AppBar color="white" position="sticky">
@@ -53,6 +55,7 @@ class Navbar extends Component {
                     className={classes.button}
                     component={Link}
                     to="/login"
+                    onClick={async () => await logout()}
                   >
                     {' '}
                     Logout{' '}

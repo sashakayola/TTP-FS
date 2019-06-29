@@ -6,7 +6,10 @@ import AuthContext from '../AuthContext';
 import TradingForm from './TradingForm';
 import Portfolio from './Portfolio';
 import { Grid } from '@material-ui/core';
-import {setIntervalAsync, clearIntervalAsync } from 'set-interval-async/dynamic'
+import {
+  setIntervalAsync,
+  clearIntervalAsync,
+} from 'set-interval-async/dynamic';
 
 class Dashboard extends Component {
   static contextType = AuthContext;
@@ -18,60 +21,51 @@ class Dashboard extends Component {
       userTransactions: [],
       userCashBalance: 5000,
       error: null,
-      canUpdatePrices: true // RENAME
+      canUpdatePrices: true, // set to true to indicate when it's ok to grab updated price data
     };
   }
 
   componentDidMount = async () => {
-    this.setState({ canUpdatePrices: false})
-    let { userId } = this.context;
-    console.log(this.state.userHoldings)
+    this.setState({ canUpdatePrices: false });
+    let { userId, isAuth } = this.context;
+
     try {
-      const userHoldings =  await this.fetchUserHoldings(userId)
+      const userHoldings = await this.fetchUserHoldings(userId);
       const userTransactions = await this.fetchUserTransactions(userId);
       let userCashBalance = await this.fetchUserCashBalance(userId);
-      this.setState({
-        userHoldings,
-        userTransactions,
-        userCashBalance,
-        canUpdatePrices: true
-      });
-      this.setState({ userHoldings,
-        userTransactions,
-        userCashBalance,
-        canUpdatePrices: true }, () => {
-
-          const timer = setIntervalAsync(
-            async () => {
-              console.log(this.state.userHoldings)
-              console.log('in here....')
-              if (!this.state.canUpdatePrices || this.state.userHoldings.length < 1) {
-                // this.setState({
-                  //   userHoldings: updatedHoldings
-                  // });
-                  clearIntervalAsync(timer)
-                }
-                await this.fetchUpdatedStockPrices();
-              console.log('bye')
-            },
-            4000
-          )
-      })
-    } catch(err) {
-      console.error(err)
+      this.setState(
+        {
+          userHoldings,
+          userTransactions,
+          userCashBalance,
+          canUpdatePrices: true,
+        },
+        () => {
+          const timer = setIntervalAsync(async () => {
+            if (
+              !this.state.canUpdatePrices ||
+              this.state.userHoldings.length < 1 ||
+              !isAuth
+            ) {
+              clearIntervalAsync(timer);
+            }
+            await this.fetchUpdatedStockPrices();
+          }, 5000);
+        },
+      );
+    } catch (err) {
+      console.error(err);
     }
-  }
+  };
 
   fetchUpdatedStockPrices = async () => {
-
-      let updatedHoldings = await this.appendCurrentPrice(this.state.userHoldings);
-      this.setState({
-        userHoldings: updatedHoldings
-      });
-      console.log('updated', this.state.userHoldings)
-
-
-  }
+    let updatedHoldings = await this.appendCurrentPrice(
+      this.state.userHoldings,
+    );
+    this.setState({
+      userHoldings: updatedHoldings,
+    });
+  };
 
   fetchUserCashBalance = async userId => {
     let user = await axios.get(`/api/users/${this.context.userId}`);
@@ -86,48 +80,48 @@ class Dashboard extends Component {
   fetchUserTransactions = async userId => {
     try {
       const response = await axios.get(`api/users/${userId}/transactions`);
-    return response.data;
+      return response.data;
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   };
 
   handleNewTransaction = async (ticker, quantity, transactionType) => {
-    let { userId } = this.context;
+    let { userId, isAuth } = this.context;
     this.setState({
       error: null,
-      canUpdatePrices: false
+      canUpdatePrices: false,
     });
+
     try {
       await axios.post(`api/users/${userId}/transactions`, {
         ticker,
         quantity,
-        transactionType
+        transactionType,
       });
       const userHoldings = await this.fetchUserHoldings(userId);
       const userTransactions = await this.fetchUserTransactions(userId);
       let userCashBalance = await this.fetchUserCashBalance(userId);
-      this.setState({ userHoldings,
-        userTransactions,
-        userCashBalance,
-        canUpdatePrices: true }, () => {
-
-          const timer = setIntervalAsync(
-            async () => {
-              console.log(this.state.userHoldings)
-              console.log('in here....')
-              if (!this.state.canUpdatePrices || this.state.userHoldings.length < 1) {
-                // this.setState({
-                  //   userHoldings: updatedHoldings
-                  // });
-                  clearIntervalAsync(timer)
-                }
-                await this.fetchUpdatedStockPrices();
-              console.log('bye')
-            },
-            4000
-          )
-      })
+      this.setState(
+        {
+          userHoldings,
+          userTransactions,
+          userCashBalance,
+          canUpdatePrices: true,
+        },
+        () => {
+          const timer = setIntervalAsync(async () => {
+            if (
+              !this.state.canUpdatePrices ||
+              this.state.userHoldings.length < 1 ||
+              !isAuth
+            ) {
+              clearIntervalAsync(timer);
+            }
+            await this.fetchUpdatedStockPrices();
+          }, 5000);
+        },
+      );
     } catch (error) {
       this.setState({
         error,
@@ -198,9 +192,8 @@ class Dashboard extends Component {
             direction="row"
             spacing={5}
           >
-          <Transactions userTransactions={this.state.userTransactions} />
+            <Transactions userTransactions={this.state.userTransactions} />
           </Grid>
-
         )}
       </div>
     );

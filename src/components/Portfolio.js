@@ -9,60 +9,64 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 function Portfolio(props) {
-  const {classes, totalValue, userHoldings} = props
+  const { classes, totalValue, userHoldings } = props;
 
   return (
-      <Card className={classes.card}>
-        <Typography variant="h5" align="center" color="primary">
-          {' '}
-          Portfolio Value: ${totalValue.toLocaleString(undefined,
- {'minimumFractionDigits':2,'maximumFractionDigits':2})}
-        </Typography>{' '}
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell size="medium">Ticker</TableCell>
-              <TableCell size="medium" align="right">
-                # Shares
-              </TableCell>
-              <TableCell size="medium" align="right">
-                Current Value
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {userHoldings &&
-              userHoldings
-                .sort(function(a, b) {
-                  if (a.ticker < b.ticker) {
-                    return -1;
-                  } else return 1;
-                })
-                .map(eachHolding => {
-                  let color = eachHolding.color;
-                  let style = classes.tableCellgrey;
-                  color === 'red'
-                    ? (style = classes.tableCellred)
-                    : (style = classes.tableCellgreen);
-                  return (
-                    <TableRow key={eachHolding.id}>
-                      <TableCell className={style}>
-                        {eachHolding.ticker}
-                      </TableCell>
-                      <TableCell align="left">
-                        {eachHolding.quantity}
-                      </TableCell>
-                      <TableCell align="left" className={style}>
-                        ${eachHolding.currentValue.toLocaleString(undefined,
- {'minimumFractionDigits':4,'maximumFractionDigits':4})}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-          </TableBody>
-        </Table>
-      </Card>
-    );
+    <Card className={classes.card}>
+      <Typography variant="h5" align="center" color="primary">
+        {' '}
+        Portfolio Value: $
+        {totalValue.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </Typography>{' '}
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell size="medium">Ticker</TableCell>
+            <TableCell size="medium" align="right">
+              # Shares
+            </TableCell>
+            <TableCell size="medium" align="right">
+              Current Value
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {userHoldings &&
+            userHoldings
+              .sort(function(a, b) {
+                if (a.ticker < b.ticker) {
+                  return -1;
+                } else return 1;
+              })
+              .map(eachHolding => {
+                let color = eachHolding.color;
+                let style = classes.tableCellgrey;
+                color === 'red'
+                  ? (style = classes.tableCellred)
+                  : (style = classes.tableCellgreen);
+                return (
+                  <TableRow key={eachHolding.id}>
+                    <TableCell className={style}>
+                      {eachHolding.ticker}
+                    </TableCell>
+                    <TableCell align="left">{eachHolding.quantity}</TableCell>
+                    <TableCell align="left" className={style}>
+                      $
+                      {eachHolding.currentValue.toLocaleString(undefined, {
+                        minimumFractionDigits: 4,
+                        maximumFractionDigits: 4,
+                      })}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+        </TableBody>
+      </Table>
+    </Card>
+  );
 }
 
 const styles = {

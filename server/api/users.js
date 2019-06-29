@@ -47,6 +47,12 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect('/login');
+});
+
 router.get('/:userId', async (req, res, next) => {
   try {
     const userId = req.params.userId;
@@ -107,21 +113,16 @@ router.post('/:userId/transactions', async (req, res, next) => {
       latestPrice,
       transactionType,
       userId,
-    )
-    await updateUserCash(
-      userId,
-      transactionType,
-      quantity,
-      latestPrice,
     );
+    await updateUserCash(userId, transactionType, quantity, latestPrice);
     if (transactionType === 'Buy') {
       await addToHoldings(ticker, quantity, userId);
     }
     res.status(201).send('Transaction successfully posted');
-    } else {
+  } else {
     res.status(400).send('Cash balance too low');
     return;
-    }
+  }
 });
 
 module.exports = router;
