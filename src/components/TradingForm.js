@@ -17,16 +17,16 @@ class TradingForm extends Component {
     };
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
     this.setState({ quantity: 1, ticker: '' });
-    this.props.onSubmit(this.state.ticker, this.state.quantity);
+    await this.props.onSubmit(this.state.ticker, Number(this.state.quantity), 'Buy');
   };
 
   render() {
     const { classes } = this.props;
     const validQuantity =
-      this.state.quantity > 0 && !String(this.state.quantity).includes('.');
+      Number(this.state.quantity) > 0 && !String(this.state.quantity).includes('.');
     const emptyTicker = this.state.ticker === '';
 
     return (
@@ -43,9 +43,8 @@ class TradingForm extends Component {
               <Grid item>
                 <Typography variant="h5" color="primary">
                   Cash Balance: $
-                  {this.props.userCashBalance.toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })}
+                  {this.props.userCashBalance.toLocaleString(undefined,
+ {'minimumFractionDigits':2,'maximumFractionDigits':2})}
                 </Typography>{' '}
               </Grid>
               <Grid item>
@@ -65,11 +64,11 @@ class TradingForm extends Component {
               <Grid item>
                 <TextField
                   id="quantity"
-                  value={Number(this.state.quantity)}
+                  value={this.state.quantity}
                   onChange={event =>
                     this.setState({
                       ...this.state,
-                      quantity: Number(event.target.value),
+                      quantity: event.target.value,
                     })
                   }
                   required

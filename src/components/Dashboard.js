@@ -6,6 +6,7 @@ import AuthContext from '../AuthContext';
 import TradingForm from './TradingForm';
 import Portfolio from './Portfolio';
 import { Grid } from '@material-ui/core';
+import {setIntervalAsync, clearIntervalAsync } from 'set-interval-async/dynamic'
 
 class Dashboard extends Component {
   static contextType = AuthContext;
@@ -17,20 +18,60 @@ class Dashboard extends Component {
       userTransactions: [],
       userCashBalance: 5000,
       error: null,
+      canUpdatePrices: true // RENAME
     };
   }
 
   componentDidMount = async () => {
+    this.setState({ canUpdatePrices: false})
     let { userId } = this.context;
-    const userHoldings = await this.fetchUserHoldings(userId);
-    const userTransactions = await this.fetchUserTransactions(userId);
-    let userCashBalance = await this.fetchUserCashBalance(userId);
-    this.setState({
-      userHoldings,
+    console.log(this.state.userHoldings)
+    try {
+      const userHoldings =  await this.fetchUserHoldings(userId)
+      const userTransactions = await this.fetchUserTransactions(userId);
+      let userCashBalance = await this.fetchUserCashBalance(userId);
+      this.setState({
+        userHoldings,
         userTransactions,
         userCashBalance,
-    });
-  };
+        canUpdatePrices: true
+      });
+      this.setState({ userHoldings,
+        userTransactions,
+        userCashBalance,
+        canUpdatePrices: true }, () => {
+
+          const timer = setIntervalAsync(
+            async () => {
+              console.log(this.state.userHoldings)
+              console.log('in here....')
+              if (!this.state.canUpdatePrices || this.state.userHoldings.length < 1) {
+                // this.setState({
+                  //   userHoldings: updatedHoldings
+                  // });
+                  clearIntervalAsync(timer)
+                }
+                await this.fetchUpdatedStockPrices();
+              console.log('bye')
+            },
+            4000
+          )
+      })
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
+  fetchUpdatedStockPrices = async () => {
+
+      let updatedHoldings = await this.appendCurrentPrice(this.state.userHoldings);
+      this.setState({
+        userHoldings: updatedHoldings
+      });
+      console.log('updated', this.state.userHoldings)
+
+
+  }
 
   fetchUserCashBalance = async userId => {
     let user = await axios.get(`/api/users/${this.context.userId}`);
@@ -43,29 +84,50 @@ class Dashboard extends Component {
   };
 
   fetchUserTransactions = async userId => {
-    const response = await axios.get(`api/users/${userId}/transactions`);
+    try {
+      const response = await axios.get(`api/users/${userId}/transactions`);
     return response.data;
+    } catch (err) {
+      console.error(err)
+    }
   };
 
-  handleNewTransaction = async (ticker, quantity) => {
+  handleNewTransaction = async (ticker, quantity, transactionType) => {
     let { userId } = this.context;
     this.setState({
       error: null,
+      canUpdatePrices: false
     });
     try {
       await axios.post(`api/users/${userId}/transactions`, {
         ticker,
         quantity,
+        transactionType
       });
       const userHoldings = await this.fetchUserHoldings(userId);
       const userTransactions = await this.fetchUserTransactions(userId);
-      console.log('user transactions', userTransactions);
       let userCashBalance = await this.fetchUserCashBalance(userId);
-      this.setState({
-        userHoldings,
+      this.setState({ userHoldings,
         userTransactions,
         userCashBalance,
-      });
+        canUpdatePrices: true }, () => {
+
+          const timer = setIntervalAsync(
+            async () => {
+              console.log(this.state.userHoldings)
+              console.log('in here....')
+              if (!this.state.canUpdatePrices || this.state.userHoldings.length < 1) {
+                // this.setState({
+                  //   userHoldings: updatedHoldings
+                  // });
+                  clearIntervalAsync(timer)
+                }
+                await this.fetchUpdatedStockPrices();
+              console.log('bye')
+            },
+            4000
+          )
+      })
     } catch (error) {
       this.setState({
         error,

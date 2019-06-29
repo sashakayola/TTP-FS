@@ -87,7 +87,9 @@ router.post('/:userId/transactions', async (req, res, next) => {
   const ticker = req.body.ticker;
   const quantity = Number(req.body.quantity);
   const userId = req.params.userId;
+  const transactionType = req.body.transactionType;
   let stockInfo = null;
+
   try {
     const response = await getStockInfo(ticker);
     stockInfo = response;
@@ -98,28 +100,28 @@ router.post('/:userId/transactions', async (req, res, next) => {
   let latestPrice = stockInfo.data.quote.latestPrice;
   let canBuy = await verifyBuy(userId, quantity, latestPrice);
 
-  if (canBuy) {
-    let transactionType = 'Buy';
+  if (canBuy || transactionType === 'Sell') {
     await createTransaction(
       ticker,
       quantity,
       latestPrice,
       transactionType,
       userId,
-    ); // creating a buy transaction in transaction table
-    await addToHoldings(ticker, quantity, userId);
-    let updatedUserBalance = await updateUserCash(
+    )
+    await updateUserCash(
       userId,
       transactionType,
       quantity,
       latestPrice,
-    ); // update user's cash balance
-    res.status(201).json({
-      updatedUserBalance,
-    });
-  } else {
+    );
+    if (transactionType === 'Buy') {
+      await addToHoldings(ticker, quantity, userId);
+    }
+    res.status(201).send('Transaction successfully posted');
+    } else {
     res.status(400).send('Cash balance too low');
-  }
+    return;
+    }
 });
 
 module.exports = router;

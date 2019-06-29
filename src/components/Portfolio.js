@@ -15,7 +15,8 @@ function Portfolio(props) {
       <Card className={classes.card}>
         <Typography variant="h5" align="center" color="primary">
           {' '}
-          Portfolio Value: ${totalValue.toLocaleString(undefined, {maximumFractionDigits:2})}
+          Portfolio Value: ${totalValue.toLocaleString(undefined,
+ {'minimumFractionDigits':2,'maximumFractionDigits':2})}
         </Typography>{' '}
         <Table className={classes.table}>
           <TableHead>
@@ -44,7 +45,7 @@ function Portfolio(props) {
                     ? (style = classes.tableCellred)
                     : (style = classes.tableCellgreen);
                   return (
-                    <TableRow key={eachHolding.ticker}>
+                    <TableRow key={eachHolding.id}>
                       <TableCell className={style}>
                         {eachHolding.ticker}
                       </TableCell>
@@ -52,7 +53,8 @@ function Portfolio(props) {
                         {eachHolding.quantity}
                       </TableCell>
                       <TableCell align="left" className={style}>
-                        {eachHolding.currentValue.toLocaleString(undefined, {maximumFractionDigits:4})}
+                        ${eachHolding.currentValue.toLocaleString(undefined,
+ {'minimumFractionDigits':4,'maximumFractionDigits':4})}
                       </TableCell>
                     </TableRow>
                   );

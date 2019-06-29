@@ -45,7 +45,7 @@ class Transactions extends Component {
                 })
                 .map(eachHolding => {
                   return (
-                    <TableRow key={eachHolding.ticker}>
+                    <TableRow key={eachHolding.id}>
                       <TableCell>{eachHolding.ticker}</TableCell>
                       <TableCell align="left">
                         {eachHolding.transactionType}
@@ -56,9 +56,8 @@ class Transactions extends Component {
                       <TableCell align="left">{eachHolding.quantity}</TableCell>
                       <TableCell align="left">
                         $
-                        {eachHolding.price.toLocaleString(undefined, {
-                          maximumFractionDigits: 4,
-                        })}
+                        {Number(eachHolding.price).toLocaleString(undefined,
+ {'minimumFractionDigits':2,'maximumFractionDigits':2})}
                       </TableCell>
                     </TableRow>
                   );
