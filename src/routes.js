@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import axios from 'axios';
-
 import { Signup, Dashboard, Login } from './components';
 import AuthContext from './AuthContext';
 
 export default class Routes extends Component {
   static contextType = AuthContext;
-  constructor(props) {
-    super(props);
-    this.state = {
-      userLoggedIn: false,
-    };
-  }
 
   async componentDidMount() {
-    if (!this.context.isAuth) {
-      await this.context.login();
+    const { isAuth, authorize } = this.context;
+    if (!isAuth) {
+      await authorize(); // reauthorize user when context wiped (if user refreshed page)
     }
   }
 
   render() {
     return (
       <Switch>
-        {this.context.isAuth && (
+        {this.context.isAuth && ( // if the user authorized, can render portfolio and transactions
           <Switch>
             <Route exact path="/dashboard/portfolio" component={Dashboard} />
             <Route exact path="/dashboard/transactions" component={Dashboard} />
