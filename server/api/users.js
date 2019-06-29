@@ -15,7 +15,7 @@ const {
 
 router.post('/', async (req, res, next) => {
   try {
-    let user = await createUser(
+    const user = await createUser(
       req.body.firstName,
       req.body.lastName,
       req.body.email,
@@ -109,7 +109,7 @@ router.post('/:userId/transactions', async (req, res, next) => {
   }
 
   // check that user has enough cash if buy transaction
-  let canBuy = await verifyBuy(userId, quantity, latestStockPrice);
+  const canBuy = await verifyBuy(userId, quantity, latestStockPrice);
 
   // if the user has enough cash for a buy OR the user is selling, process transaction
   if (canBuy || transactionType === 'Sell') {

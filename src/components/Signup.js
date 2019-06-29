@@ -35,7 +35,7 @@ class Signup extends Component {
         error: null,
       });
       const { firstName, lastName, email, password } = getFormData(event);
-      let user = await axios.post('api/users/', {
+      await axios.post('api/users/', {
         firstName,
         lastName,
         email,

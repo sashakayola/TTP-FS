@@ -13,13 +13,11 @@ const App = ({ classes }) => {
   return (
     <div className={classes.mainContent}>
       <div className={classes.app}>
-
-<AuthProvider>
-        <BrowserRouter>
-          <Navbar /> <Routes />
-        </BrowserRouter>{' '}
-
-</AuthProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Navbar /> <Routes />
+          </BrowserRouter>{' '}
+        </AuthProvider>
       </div>{' '}
     </div>
   );

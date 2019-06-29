@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import axios from 'axios';
 
 import { Signup, Dashboard, Login } from './components';
 import AuthContext from './AuthContext';

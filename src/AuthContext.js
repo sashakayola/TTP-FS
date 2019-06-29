@@ -13,7 +13,7 @@ class AuthProvider extends React.Component {
 
   login = async () => {
     try {
-      let user = await axios.get('/api/auth/me');
+      const user = await axios.get('/api/auth/me');
       this.setState(
         {
           isAuth: true,

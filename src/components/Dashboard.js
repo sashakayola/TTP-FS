@@ -27,12 +27,12 @@ class Dashboard extends Component {
 
   componentDidMount = async () => {
     this.setState({ canUpdatePrices: false });
-    let { userId, isAuth } = this.context;
+    const { userId, isAuth } = this.context;
 
     try {
       const userHoldings = await this.fetchUserHoldings(userId);
       const userTransactions = await this.fetchUserTransactions(userId);
-      let userCashBalance = await this.fetchUserCashBalance(userId);
+      const userCashBalance = await this.fetchUserCashBalance(userId);
       this.setState(
         {
           userHoldings,
@@ -68,7 +68,7 @@ class Dashboard extends Component {
   };
 
   fetchUserCashBalance = async userId => {
-    let response = await axios.get(`/api/users/${this.context.userId}`);
+    const response = await axios.get(`/api/users/${this.context.userId}`);
     return Number(response.data.user.user.balance);
   };
 
@@ -87,7 +87,7 @@ class Dashboard extends Component {
   };
 
   handleNewTransaction = async (ticker, quantity, transactionType) => {
-    let { userId, isAuth } = this.context;
+    const { userId, isAuth } = this.context;
     this.setState({
       error: null,
       canUpdatePrices: false,
@@ -101,7 +101,7 @@ class Dashboard extends Component {
       });
       const userHoldings = await this.fetchUserHoldings(userId);
       const userTransactions = await this.fetchUserTransactions(userId);
-      let userCashBalance = await this.fetchUserCashBalance(userId);
+      const userCashBalance = await this.fetchUserCashBalance(userId);
       this.setState(
         {
           userHoldings,

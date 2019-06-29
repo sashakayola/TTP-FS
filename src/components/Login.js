@@ -32,7 +32,7 @@ class Login extends Component {
         error: null,
       });
       const { email, password } = getFormData(event);
-      const user = await axios.post('api/users/login/', {
+      await axios.post('api/users/login/', {
         email,
         password,
       });

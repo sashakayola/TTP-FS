@@ -8,7 +8,7 @@ const createUser = async (
   password,
   balance = 5000, // set initial balance to $5000
 ) => {
-  let user = await User.create({
+  const user = await User.create({
     firstName,
     lastName,
     email,
@@ -20,7 +20,7 @@ const createUser = async (
 
 // find user by email if they exist in db
 const findByEmail = async email => {
-  let user = await User.findOne({
+  const user = await User.findOne({
     where: {
       email,
     },
@@ -30,23 +30,23 @@ const findByEmail = async email => {
 
 // find user by id if they exist in db
 const findById = async id => {
-  let user = await User.findByPk(id);
+  const user = await User.findByPk(id);
   return user;
 };
 
 // update user's cash balance to process transaction
 const updateUserCash = async (id, transactionType, quantity, price) => {
-  let user = await User.findByPk(id);
-  let balance = user.dataValues.balance;
-  let totalAmount = quantity * price;
+  const user = await User.findByPk(id);
+  const balance = user.dataValues.balance;
+  const totalAmount = quantity * price;
 
   if (transactionType === 'Buy') {
-    let newBalance = balance - totalAmount;
+    const newBalance = balance - totalAmount;
     User.update({ balance: newBalance }, { where: { id } });
     return newBalance;
   } else {
     // else transaction is a sell
-    let newBalance = balance + totalAmount;
+    const newBalance = balance + totalAmount;
     User.update({ balance: newBalance }, { where: { id } });
     return newBalance;
   }
