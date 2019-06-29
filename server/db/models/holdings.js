@@ -5,7 +5,6 @@ const Holdings = db.define('holdings', {
   ticker: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true
   },
   quantity: {
     type: Sequelize.INTEGER,

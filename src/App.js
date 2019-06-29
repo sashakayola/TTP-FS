@@ -5,8 +5,11 @@ import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import backgroundImage from './assets/backgroundImage.jpg';
 import { AuthProvider } from './AuthContext';
+import axios from 'axios';
 
 const App = ({ classes }) => {
+  axios.defaults.baseURL = 'http://localhost:3000';
+
   return (
     <div className={classes.mainContent}>
       <div className={classes.app}>

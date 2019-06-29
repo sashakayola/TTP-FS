@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { createUser, findByEmail, findById } = require('../domain/users');
 const { getHoldings } = require('../domain/holdings');
+const { getTransactions } = require('../domain/transactions');
 const { getStockInfo } = require('../domain/iex');
 const { createTransaction } = require('../domain/transactions');
 const { verifyBuy } = require('../domain/transactions');
@@ -13,7 +14,7 @@ router.post('/', async (req, res, next) => {
       req.body.firstName,
       req.body.lastName,
       req.body.email,
-      req.body.password
+      req.body.password,
     );
 
     // to establish login session. after login complete, user will be assigned to req.user
@@ -46,6 +47,12 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect('/login');
+});
+
 router.get('/:userId', async (req, res, next) => {
   try {
     const userId = req.params.userId;
@@ -55,7 +62,7 @@ router.get('/:userId', async (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      balance: user.balance
+      balance: user.balance,
     });
   } catch (error) {
     next(error);
@@ -72,12 +79,23 @@ router.get('/:userId/holdings', async (req, res, next) => {
   }
 });
 
+router.get('/:userId/transactions', async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const transactions = await getTransactions(userId);
+    res.status(200).send(transactions);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post('/:userId/transactions', async (req, res, next) => {
   const ticker = req.body.ticker;
   const quantity = Number(req.body.quantity);
   const userId = req.params.userId;
+  const transactionType = req.body.transactionType;
   let stockInfo = null;
+
   try {
     const response = await getStockInfo(ticker);
     stockInfo = response;
@@ -88,27 +106,22 @@ router.post('/:userId/transactions', async (req, res, next) => {
   let latestPrice = stockInfo.data.quote.latestPrice;
   let canBuy = await verifyBuy(userId, quantity, latestPrice);
 
-  if (canBuy) {
-    let transactionType = 'buy';
+  if (canBuy || transactionType === 'Sell') {
     await createTransaction(
       ticker,
       quantity,
       latestPrice,
       transactionType,
       userId,
-    ); // creating a buy transaction in transaction table
-    await addToHoldings(ticker, quantity, userId);
-    let updatedUserBalance = await updateUserCash(
-      userId,
-      transactionType,
-      quantity,
-      latestPrice,
-    ); // update user's cash balance
-    res.status(201).json({
-      updatedUserBalance,
-    });
+    );
+    await updateUserCash(userId, transactionType, quantity, latestPrice);
+    if (transactionType === 'Buy') {
+      await addToHoldings(ticker, quantity, userId);
+    }
+    res.status(201).send('Transaction successfully posted');
   } else {
     res.status(400).send('Cash balance too low');
+    return;
   }
 });
 

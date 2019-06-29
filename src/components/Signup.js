@@ -41,8 +41,8 @@ class Signup extends Component {
         email,
         password,
       });
-      login(user.data.id);
-      this.props.history.push('/portfolio');
+      await login();
+      this.props.history.push('dashboard/portfolio');
     } catch (authError) {
       this.setState({
         error: authError,
@@ -118,7 +118,7 @@ class Signup extends Component {
                   )}{' '}
                   <Grid item>
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
                       size="large"
                       type="submit"

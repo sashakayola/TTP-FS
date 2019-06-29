@@ -8,32 +8,27 @@ const db = require('./db');
 const sessionStore = new SequelizeStore({
   db,
 });
+const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const {
-  findById
-} = require('./domain/users');
+const { findById } = require('./domain/users');
 module.exports = app;
 
-const createApp = () => {
-  passport.serializeUser((user, done) => done(null, String(user.id)));
+passport.serializeUser((user, done) => done(null, String(user.id)));
 
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await findById(id);
-      done(null, user);
-    } catch (err) {
-      done(err);
-    }
-  });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+const createApp = () => {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   app.use(morgan('dev'));
-  app.use(express.json());
-  app.use(
-    express.urlencoded({
-      extended: true,
-    })
-  );
 
   app.use(
     session({
@@ -41,7 +36,9 @@ const createApp = () => {
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
-    })
+      proxy: true,
+      // cookie: { maxAge: 80 * 80 * 60 * 1000, secure: false },
+    }),
   );
 
   app.use(passport.initialize());

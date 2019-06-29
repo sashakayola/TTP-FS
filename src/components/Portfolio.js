@@ -1,127 +1,91 @@
-import React, { Component } from 'react';
-import { Grid } from '@material-ui/core';
+import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import TradingForm from './TradingForm';
-import CurrentHoldings from './CurrentHoldings';
-import axios from 'axios';
-import AuthContext from '../AuthContext';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
-class Portfolio extends Component {
-  static contextType = AuthContext;
+function Portfolio(props) {
+  const { classes, totalValue, userHoldings } = props;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      userHoldings: [],
-      // error: {}
-    };
-  }
-
-  componentDidMount = async () => {
-    let { userId } = this.context;
-    const userHoldings = await this.fetchUserHoldings(userId);
-    this.setState({
-      userHoldings,
-    });
-  };
-
-  fetchUserHoldings = async userId => {
-    const response = await axios.get(`api/users/${userId}/holdings`);
-    return await this.appendCurrentPrice(response.data);
-  };
-
-  updateUserHoldings = userHoldings => {
-    this.setState({
-      userHoldings,
-    });
-  };
-
-  handleNewTransaction = async () => {
-    let { userId } = this.context;
-    // this.setState({...this.state, error: {}});
-
-    // axios.post()
-    // if !response.ok {
-    //   this.setState({...this.state, error: {type: 'giusdbuf', message: 'saidhauf'}})
-    // } else {
-    //   const userHoldings = await this.fetchUserHoldings();
-    //   this.setState({
-    //     userHoldings,
-    //   });
-    // }
-    const userHoldings = await this.fetchUserHoldings(userId);
-    this.setState({
-      userHoldings,
-    });
-  };
-
-  getStockPriceInfo = async ticker => {
-    const response = await axios.get(`api/prices/${ticker}`);
-    const openPrice = response.data.open;
-    const currentPrice = response.data.latestPrice;
-    return { openPrice, currentPrice };
-  };
-
-  appendCurrentPrice = async assets => {
-    const pricedAssets = assets.map(async asset => {
-      const { openPrice, currentPrice } = await this.getStockPriceInfo(
-        asset.ticker,
-      );
-      const currentValue = currentPrice * asset.quantity;
-      let color = 'grey';
-      if (currentPrice < openPrice) color = 'red';
-      else if (currentPrice > openPrice) color = 'green';
-      return { ...asset, currentValue, color };
-    });
-    return await Promise.all(pricedAssets);
-  };
-
-  calculateTotalValue = assets => {
-    return assets.reduce((totalValue, asset) => {
-      return totalValue + asset.currentValue;
-    }, 0);
-  };
-
-  render() {
-    const { classes } = this.props;
-    const totalValue = this.calculateTotalValue(this.state.userHoldings);
-    console.log(totalValue);
-
-    return (
-      <div className={classes.mainContent}>
-        <Grid
-          container
-          className={classes.mainContent}
-          justify="center"
-          alignItems="center"
-          direction="row"
-          spacing={5}
-        >
-          <CurrentHoldings
-            userHoldings={this.state.userHoldings}
-            totalValue={totalValue}
-          />
-          <TradingForm
-            onSubmit={this.handleNewTransaction}
-            error={this.state.error}
-          />{' '}
-        </Grid>{' '}
-      </div>
-    );
-  }
+  return (
+    <Card className={classes.card}>
+      <Typography variant="h5" align="center" color="primary">
+        {' '}
+        Portfolio Value: $
+        {totalValue.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </Typography>{' '}
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell size="medium">Ticker</TableCell>
+            <TableCell size="medium" align="right">
+              # Shares
+            </TableCell>
+            <TableCell size="medium" align="right">
+              Current Value
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {userHoldings &&
+            userHoldings
+              .sort(function(a, b) {
+                if (a.ticker < b.ticker) {
+                  return -1;
+                } else return 1;
+              })
+              .map(eachHolding => {
+                let color = eachHolding.color;
+                let style = classes.tableCellgrey;
+                color === 'red'
+                  ? (style = classes.tableCellred)
+                  : (style = classes.tableCellgreen);
+                return (
+                  <TableRow key={eachHolding.id}>
+                    <TableCell className={style}>
+                      {eachHolding.ticker}
+                    </TableCell>
+                    <TableCell align="left">{eachHolding.quantity}</TableCell>
+                    <TableCell align="left" className={style}>
+                      $
+                      {eachHolding.currentValue.toLocaleString(undefined, {
+                        minimumFractionDigits: 4,
+                        maximumFractionDigits: 4,
+                      })}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+        </TableBody>
+      </Table>
+    </Card>
+  );
 }
 
 const styles = {
-  mainContent: {
-    width: '100%',
-    height: '100%',
-  },
   card: {
-    padding: '30px',
-    margin: '80px',
+    padding: '40px',
+    margin: '90px',
   },
-  text: {
-    width: 250,
+  table: {
+    overflowX: 'auto',
+    overflowY: 'auto',
+  },
+  tableCellred: {
+    color: 'RED',
+  },
+  tableCellgreen: {
+    color: 'GREEN',
+  },
+  tableCellgrey: {
+    color: 'GREY',
   },
 };
 

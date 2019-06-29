@@ -21,6 +21,9 @@ const Transactions = db.define('transactions', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  createdAt: {
+    type: Sequelize.DATEONLY
+  }
 });
 
 module.exports = Transactions;
