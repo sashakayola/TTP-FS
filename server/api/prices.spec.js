@@ -3,7 +3,7 @@ const request = require('supertest');
 const db = require('../db');
 const app = require('..');
 
-xdescribe('Routes to get price info', () => {
+describe('Routes to get price info', () => {
   beforeEach(() => {
     return db.sync({ force: true });
   });
