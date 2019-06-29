@@ -9,7 +9,7 @@ describe('User model', () => {
 
   describe('instanceMethods', () => {
     describe('correctPassword', () => {
-      let sasha
+      const sasha
 
       beforeEach(async () => {
         sasha = await User.create({

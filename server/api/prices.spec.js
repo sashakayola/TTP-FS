@@ -10,7 +10,7 @@ describe('Routes to get price info', () => {
 
   describe('GET /api/prices/:ticker', () => {
     it('should return stock info based on ticker', async () => {
-      let ticker = 'AAPL';
+      const ticker = 'AAPL';
       const res = await request(app)
         .get(`api/prices/${ticker}`)
         .expect(200);

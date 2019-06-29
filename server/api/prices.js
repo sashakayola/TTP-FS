@@ -3,9 +3,9 @@ const { getStockInfo } = require('../domain/iex');
 
 router.get('/:ticker', async (req, res, next) => {
   const ticker = req.params.ticker;
-  let stockInfo = await getStockInfo(ticker);
-  let latestPrice = stockInfo.data.quote.latestPrice;
-  let open = stockInfo.data.quote.open;
+  const stockInfo = await getStockInfo(ticker);
+  const latestPrice = stockInfo.data.quote.latestPrice;
+  const open = stockInfo.data.quote.open;
   res.status(200).json({
     open,
     latestPrice,

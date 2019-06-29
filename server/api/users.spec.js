@@ -29,7 +29,7 @@ describe('Routes to get user info and login user', () => {
   });
 
   describe('POST /api/users/login', () => {
-    let user = {
+    const user = {
       email: 'bob@gmail.com',
       password: '123',
     };
@@ -46,7 +46,7 @@ describe('Routes to get user info and login user', () => {
 
 describe('Route to create a new user', () => {
   describe('POST /api/users/', () => {
-    let user = {
+    const user = {
       firstName: 'Sandy',
       lastName: 'Cheeks',
       email: 'sandy@gmail.com',
@@ -78,7 +78,7 @@ describe('Route to create a transaction', () => {
       balance: 5000,
     });
 
-    let stockInfo = {
+    const stockInfo = {
       ticker: 'AAPL',
       quantity: 1,
       transactionType: 'Buy',

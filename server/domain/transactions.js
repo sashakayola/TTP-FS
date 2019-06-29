@@ -19,7 +19,7 @@ const createTransaction = async (
   transactionType,
   userId,
 ) => {
-  let transaction = await Transactions.create({
+  const transaction = await Transactions.create({
     ticker,
     quantity,
     price,
@@ -31,9 +31,9 @@ const createTransaction = async (
 
 // verify if user has enough cash for buy transaction
 const verifyBuy = async (userId, quantity, latestPrice) => {
-  let user = await findById(userId);
-  let userCashBalance = user.balance;
-  let remainingBalance = userCashBalance - latestPrice * quantity;
+  const user = await findById(userId);
+  const userCashBalance = user.balance;
+  const remainingBalance = userCashBalance - latestPrice * quantity;
   return remainingBalance > 0;
 };
 

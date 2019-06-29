@@ -49,9 +49,36 @@ class Dashboard extends Component {
     }
   };
 
+  fetchUpdatedStockPrices = async () => {
+    const updatedHoldings = await this.appendCurrentPrice(
+      this.state.userHoldings,
+    );
+    this.setState({
+      userHoldings: updatedHoldings,
+    });
+  };
+
+  fetchUserCashBalance = async userId => {
+    const response = await axios.get(`/api/users/${this.context.userId}`);
+    return Number(response.data.user.user.balance);
+  };
+
+  fetchUserHoldings = async userId => {
+    const response = await axios.get(`api/users/${userId}/holdings`);
+    return await this.appendCurrentPrice(response.data);
+  };
+
+  fetchUserTransactions = async userId => {
+    try {
+      const response = await axios.get(`api/users/${userId}/transactions`);
+      return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   handleNewTransaction = async (ticker, quantity, transactionType) => {
     const { userId } = this.context;
-
     this.setState({
       error: null,
       canUpdatePrices: false,
