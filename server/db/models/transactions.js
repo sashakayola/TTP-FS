@@ -13,17 +13,19 @@ const Transactions = db.define('transactions', {
       min: 0,
     },
   },
-  price: { // price bought or sold
+  price: {
+    // price bought or sold
     type: Sequelize.DECIMAL,
     allowNull: false,
   },
-  transactionType: { // buy or sell
+  transactionType: {
+    // buy or sell
     type: Sequelize.STRING,
     allowNull: false,
   },
   createdAt: {
-    type: Sequelize.DATEONLY
-  }
+    type: Sequelize.DATEONLY,
+  },
 });
 
 module.exports = Transactions;

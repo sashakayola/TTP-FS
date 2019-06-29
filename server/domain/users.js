@@ -1,5 +1,6 @@
 const User = require('../db/models/user');
 
+// add new user
 const createUser = async (
   firstName,
   lastName,
@@ -17,6 +18,7 @@ const createUser = async (
   return user;
 };
 
+// find user by email if they exist in db
 const findByEmail = async email => {
   let user = await User.findOne({
     where: {
@@ -26,11 +28,13 @@ const findByEmail = async email => {
   return user;
 };
 
+// find user by id if they exist in db
 const findById = async id => {
   let user = await User.findByPk(id);
   return user;
 };
 
+// update user's cash balance to process transaction
 const updateUserCash = async (id, transactionType, quantity, price) => {
   let user = await User.findByPk(id);
   let balance = user.dataValues.balance;

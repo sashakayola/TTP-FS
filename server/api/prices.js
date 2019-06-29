@@ -8,8 +8,8 @@ router.get('/:ticker', async (req, res, next) => {
   let open = stockInfo.data.quote.open;
   res.status(200).json({
     open,
-    latestPrice
+    latestPrice,
   });
-})
+});
 
 module.exports = router;

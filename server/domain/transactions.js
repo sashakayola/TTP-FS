@@ -1,7 +1,7 @@
 const { Transactions } = require('../db/models/');
 const { findById } = require('./users');
 
-// get all transactions associated with a user id
+// get all transactions for user
 const getTransactions = async userId => {
   try {
     const transactions = await Transactions.findAll({ where: { userId } });
@@ -11,7 +11,7 @@ const getTransactions = async userId => {
   }
 };
 
-// function to get add transaction to transactions table (buy or sell)
+// add transaction to transactions table (buy or sell)
 const createTransaction = async (
   ticker,
   quantity,
@@ -29,7 +29,7 @@ const createTransaction = async (
   return transaction;
 };
 
-// verify if the user has enough cash for a buy transaction
+// verify if user has enough cash for buy transaction
 const verifyBuy = async (userId, quantity, latestPrice) => {
   let user = await findById(userId);
   let userCashBalance = user.balance;

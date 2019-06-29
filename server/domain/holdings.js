@@ -1,6 +1,6 @@
 const Holdings = require('../db/models/holdings');
 
-// get all holdings associated with a user id
+// get all holdings associated with user id
 const getHoldings = async userId => {
   try {
     const currentHoldings = await Holdings.findAll({ where: { userId } });
@@ -10,17 +10,20 @@ const getHoldings = async userId => {
   }
 };
 
-// add stock to a user's portfolio
+// add stock to user's portfolio
 const addToHoldings = async (ticker, quantity, userId) => {
   try {
     const stock = await Holdings.findOne({ where: { userId, ticker: ticker } });
     let currentQuantity = stock.dataValues.quantity;
     let newQuantity = currentQuantity + quantity;
+
+    // if the user already has stock's with this ticker, update the quantity
     await Holdings.update(
       { quantity: newQuantity },
       { where: { userId, ticker: ticker } },
     );
   } catch (error) {
+    // if the user does not own a stock with this tocker, add to their portfolio
     await Holdings.create({
       ticker,
       quantity,

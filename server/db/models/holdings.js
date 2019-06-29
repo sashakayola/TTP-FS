@@ -11,7 +11,7 @@ const Holdings = db.define('holdings', {
     allowNull: false,
     validate: {
       min: 0,
-    }
+    },
   },
 });
 
