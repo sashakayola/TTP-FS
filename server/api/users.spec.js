@@ -132,7 +132,7 @@ describe('Route to create a transaction', () => {
     };
 
     it('should post a buy transaction', async () => {
-      const userId = 1
+      const userId = 1;
       await request(app)
         .post(`/api/users/${userId}/transactions`)
         .send(stockInfo)
