@@ -18,7 +18,8 @@ class Login extends Component {
   }
 
   handleSubmit = async event => {
-    const { login } = this.context;
+    const { authorize } = this.context;
+
     const getFormData = event => {
       return {
         email: event.target.email.value,
@@ -32,14 +33,13 @@ class Login extends Component {
         error: null,
       });
       const { email, password } = getFormData(event);
-      const user = await axios.post('api/users/login/', {
+      await axios.post('api/users/login/', {
         email,
         password,
       });
-      await login();
+      await authorize();
       this.props.history.push('/dashboard/portfolio');
     } catch (authError) {
-      console.error(authError);
       this.setState({
         error: authError,
       });
@@ -73,27 +73,27 @@ class Login extends Component {
                   spacing={4}
                 >
                   <Grid item>
-                    <Typography variant="h5"> Welcome back </Typography>{' '}
-                  </Grid>{' '}
+                    <Typography variant="h5"> Welcome back </Typography>
+                  </Grid>
                   <Grid item>
                     <Input
                       name="email"
                       type="text"
                       placeholder="Email"
                       className={classes.text}
-                    />{' '}
-                  </Grid>{' '}
+                    />
+                  </Grid>
                   <Grid item>
                     <Input
                       name="password"
                       type="password"
                       placeholder="Password"
                       className={classes.text}
-                    />{' '}
-                  </Grid>{' '}
+                    />
+                  </Grid>
                   {this.state.error && (
                     <div> {this.state.error.response.data} </div>
-                  )}{' '}
+                  )}
                   <Grid item>
                     <Button
                       variant="contained"
@@ -101,23 +101,23 @@ class Login extends Component {
                       size="large"
                       type="submit"
                     >
-                      Login{' '}
-                    </Button>{' '}
-                  </Grid>{' '}
+                      Login
+                    </Button>
+                  </Grid>
                   <Grid item>
                     <Button
                       color="secondary"
                       size="small"
                       onClick={this.redirectToSignup}
                     >
-                      {'Not a client? Sign up'}{' '}
-                    </Button>{' '}
-                  </Grid>{' '}
-                </Grid>{' '}
-              </form>{' '}
-            </Card>{' '}
-          </Grid>{' '}
-        </Grid>{' '}
+                      {'Not a client? Sign up'}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </Card>
+          </Grid>
+        </Grid>
       </div>
     );
   }
